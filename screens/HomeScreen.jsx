@@ -10,14 +10,14 @@ import CarouselItem, {
 } from "../components/CarouselItem";
 import data from "../data";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [index, setIndex] = useState(0);
   const isCarousel = useRef(null);
   return (
     <SafeAreaView
       style={{
         flex: 1,
-        paddingVertical: 20,
+        paddingVertical: 40,
         alignItems: "center",
       }}
     >
@@ -30,11 +30,11 @@ const HomeScreen = () => {
           paddingBottom: 20,
         }}
       >
-        <View style={{ paddingRight: 10 }}>
+        <View style={{ paddingRight: 20 }}>
           <Text variant="headlineLarge">Upcoming</Text>
           <Text variant="headlineLarge">Event</Text>
         </View>
-        <View style={{ paddingLeft: 10 }}>
+        <View style={{ paddingLeft: 20 }}>
           <Text variant="titleLarge">Moon phase</Text>
           <Text variant="titleLarge">Partial</Text>
         </View>
@@ -52,7 +52,7 @@ const HomeScreen = () => {
         useScrollView={true}
         onSnapToItem={(index) => setIndex(index)}
       />
-      <Pagination
+      {/* <Pagination
         dotsLength={data.length}
         activeDotIndex={index}
         carouselRef={isCarousel}
@@ -66,7 +66,7 @@ const HomeScreen = () => {
         inactiveDotOpacity={0.4}
         inactiveDotScale={0.6}
         tappableDots={true}
-      />
+      /> */}
     </SafeAreaView>
   );
 };

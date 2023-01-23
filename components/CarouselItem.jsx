@@ -1,26 +1,43 @@
-import React from "react";
 import { StyleSheet, Dimensions, Image } from "react-native";
-import { Text, I } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Avatar, Button, Card, Text } from "react-native-paper";
 
-export const SLIDER_WIDTH = Dimensions.get("window").width * 0.8;
-export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 1);
+import { SafeAreaView } from "react-native-safe-area-context";
+import LinkButton from "./LinkButton";
+export const SLIDER_WIDTH = Dimensions.get("window").width * 1;
+export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.8);
 
 const CarouselItem = ({ item, index }) => {
   return (
     <SafeAreaView
-      style={{
-        backgroundColor: "rgb(78, 68, 75)",
-        borderRadius: 10,
-        width: ITEM_WIDTH,
-        paddingBottom: 0,
-        height: "80%",
-      }}
+      style={
+        {
+          // borderRadius: 10,
+          // width: ITEM_WIDTH,
+          // paddingBottom: 0,
+          // height: "80%",
+        }
+      }
       key={index}
     >
-      <Image source={{ uri: item.imgUrl }} style={styles.image} />
-      <Text style={styles.header}>{item.title}</Text>
-      <Text style={styles.body}>{item.body}</Text>
+      <Card
+        mode="contained"
+        elevation={3}
+        onPress={() => navigation.navigate("User")}
+      >
+        <Card.Cover source={{ uri: item.imgUrl }} />
+        <Card.Title title={item.title} titleVariant="titleLarge" />
+        <Card.Content style={{ paddingBottom: 10 }}>
+          <Text variant="bodyMedium">{item.body}</Text>
+        </Card.Content>
+        <Card.Actions style={{ paddingBottom: 20 }}>
+          <LinkButton
+            mode="outlined"
+            to={{ screen: "User", params: { id: "jane" } }}
+          >
+            Explore
+          </LinkButton>
+        </Card.Actions>
+      </Card>
     </SafeAreaView>
   );
 };
