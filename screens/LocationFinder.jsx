@@ -7,12 +7,17 @@ import worldLocations from "../data/worldLocations";
 
 const LocationFinder = ({ navigation }) => {
   const [pin, setPin] = useState({ latitude: 51.50722, longitude: -0.1275 });
+  const [region, setRegion] = useState({
+    latitude: 51.50722,
+    longitude: -0.1275,
+    latitudeDelta: 0.05,
+    longitudeDelta: 200,
+  })
   const [continent, setContinent] = useState("asia");
   const [locations, setLocations] = useState([])
   const [value, setValue] = useState("");
   const theme = useTheme();
 
-  console.log(locations)
 
   useEffect(() => {
     const filteredLocations = worldLocations.filter((location) => location.continent === continent);
@@ -22,12 +27,7 @@ const LocationFinder = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <MapView
-        initialRegion={{
-          latitude: 51.50722,
-          longitude: -0.1275,
-          latitudeDelta: 0.05,
-          longitudeDelta: 200,
-        }}
+        region={region}
         style={{ width: "100%", height: "50%" }}
       >
         <MarkerAnimated
@@ -65,17 +65,41 @@ const LocationFinder = ({ navigation }) => {
           {
             value: "europe",
             label: "Europe",
-            onPress: () => setContinent("europe"),
+            onPress: () => {
+              setContinent("europe")
+              setRegion({
+                latitude: 48.864716,
+                longitude: 2.349014,
+                latitudeDelta: 0.05,
+                longitudeDelta: 50,
+              })
+            },
           },
           {
             value: "africa",
             label: "Africa",
-            onPress: () => setContinent("africa"),
+            onPress: () => {
+              setContinent("africa")
+              setRegion({
+                latitude: 4.37333,
+                longitude: 18.56278,
+                latitudeDelta: 0.05,
+                longitudeDelta: 100,
+              })
+            },
           },
           {
             value: "asia",
             label: "Asia",
-            onPress: () => setContinent("asia"),
+            onPress: () => {
+              setContinent("europe")
+              setRegion({
+                latitude: 27.47222,
+                longitude: 89.63611,
+                latitudeDelta: 0.05,
+                longitudeDelta: 75,
+              })
+            },
           },
         ]}/>
         <SegmentedButtons
@@ -86,12 +110,28 @@ const LocationFinder = ({ navigation }) => {
           {
             value: "north-america",
             label: "North America",
-            onPress: () => setContinent("north-america"),
+            onPress: () => {
+              setContinent("europe")
+              setRegion({
+                latitude: 35.481918,
+                longitude: -97.508469,
+                latitudeDelta: 0.05,
+                longitudeDelta: 75,
+              })
+            },
           },
           {
             value: "south-america",
             label: "South America",
-            onPress: () => setContinent("south-america"),
+            onPress: () => {
+              setContinent("europe")
+              setRegion({
+                latitude: -25.300,
+                longitude: -57.633,
+                latitudeDelta: 0.05,
+                longitudeDelta: 90,
+              })
+            },
           },
         ]}/>
         <List.Section style={{alignItems: "center"}}>
@@ -102,7 +142,15 @@ const LocationFinder = ({ navigation }) => {
               title={location.countries}
               titleEllipsizeMode="head"
               titleStyle={{textAlign: "center"}}
-              onPress={() => console.log("On press")}
+              onPress={() => {
+                setPin(location.coordinate)
+                setRegion({
+                  latitude: location.coordinate.latitude,
+                  longitude: location.coordinate.longitude,
+                  latitudeDelta: 0.05,
+                  longitudeDelta: 15,
+                })
+              }}
               style={{marginBottom: 5, paddingVertical: 0, borderWidth: 1, borderStyle: "solid", borderColor: theme.colors.outline, backgroundColor: theme.colors.surfaceVariant, borderRadius: 10, width: "50%"}}
               />
             )
