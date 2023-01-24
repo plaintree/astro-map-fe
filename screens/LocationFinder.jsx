@@ -12,12 +12,12 @@ const LocationFinder = ({ navigation }) => {
     longitude: -0.1275,
     latitudeDelta: 0.05,
     longitudeDelta: 200,
-  })
+  });
   const [continent, setContinent] = useState("asia");
-  const [locations, setLocations] = useState([])
+  const [locations, setLocations] = useState([]);
+  const [markerTitle, setMarkerTitle] = useState("United Kingdom");
   const [value, setValue] = useState("");
   const theme = useTheme();
-
 
   useEffect(() => {
     const filteredLocations = worldLocations.filter((location) => location.continent === continent);
@@ -39,8 +39,8 @@ const LocationFinder = ({ navigation }) => {
               longitude: e.nativeEvent.coordinate.longitude,
             })
           }
-          title="London"
-          description="Upcoming Events"
+          title="Upcoming Events"
+          description="Click to see more..."
           onCalloutPress={() =>
             navigation.navigate("Home", { params: "london" })
           }
@@ -67,6 +67,10 @@ const LocationFinder = ({ navigation }) => {
             label: "Europe",
             onPress: () => {
               setContinent("europe")
+              setPin({
+                latitude: 48.864716,
+                longitude: 2.349014,
+              })
               setRegion({
                 latitude: 48.864716,
                 longitude: 2.349014,
@@ -80,6 +84,10 @@ const LocationFinder = ({ navigation }) => {
             label: "Africa",
             onPress: () => {
               setContinent("africa")
+              setPin({
+                latitude: 4.37333,
+                longitude: 18.56278,
+              })
               setRegion({
                 latitude: 4.37333,
                 longitude: 18.56278,
@@ -92,7 +100,11 @@ const LocationFinder = ({ navigation }) => {
             value: "asia",
             label: "Asia",
             onPress: () => {
-              setContinent("europe")
+              setContinent("asia")
+              setPin({
+                latitude: 27.47222,
+                longitude: 89.63611,
+              })
               setRegion({
                 latitude: 27.47222,
                 longitude: 89.63611,
@@ -111,7 +123,11 @@ const LocationFinder = ({ navigation }) => {
             value: "north-america",
             label: "North America",
             onPress: () => {
-              setContinent("europe")
+              setContinent("north-america")
+              setPin({
+                latitude: 35.481918,
+                longitude: -97.508469,
+              })
               setRegion({
                 latitude: 35.481918,
                 longitude: -97.508469,
@@ -124,7 +140,11 @@ const LocationFinder = ({ navigation }) => {
             value: "south-america",
             label: "South America",
             onPress: () => {
-              setContinent("europe")
+              setContinent("south-america")
+              setPin({
+                latitude: -25.300,
+                longitude: -57.633,
+              })
               setRegion({
                 latitude: -25.300,
                 longitude: -57.633,
@@ -143,6 +163,7 @@ const LocationFinder = ({ navigation }) => {
               titleEllipsizeMode="head"
               titleStyle={{textAlign: "center"}}
               onPress={() => {
+                setMarkerTitle(location.countries)
                 setPin(location.coordinate)
                 setRegion({
                   latitude: location.coordinate.latitude,
