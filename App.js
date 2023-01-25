@@ -1,6 +1,6 @@
-import { StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { Text, MD3DarkTheme, Button } from "react-native-paper";
+import { StyleSheet, StatusBarStyle } from "react-native";
+import { NavigationContainer, useFocusEffect } from "@react-navigation/native";
+import { View, Text, MD3DarkTheme, Button } from "react-native-paper";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
@@ -14,8 +14,9 @@ import TimeMachine from "./screens/TimeMachine";
 
 export default function App() {
   const Tab = createMaterialBottomTabNavigator();
+
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider >
       <PaperProvider theme={MD3DarkTheme}>
         <NavigationContainer theme={MD3DarkTheme}>
           <Tab.Navigator initialRouteName="Home">

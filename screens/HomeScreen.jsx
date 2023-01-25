@@ -10,7 +10,7 @@ import CarouselItem, {
 } from "../components/CarouselItem";
 import data from "../data";
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreenStack = () => {
   const [index, setIndex] = useState(0);
   const isCarousel = useRef(null);
   return (
@@ -52,21 +52,56 @@ const HomeScreen = ({ navigation }) => {
         useScrollView={true}
         onSnapToItem={(index) => setIndex(index)}
       />
-      {/* <Pagination
-        dotsLength={data.length}
-        activeDotIndex={index}
-        carouselRef={isCarousel}
-        dotStyle={{
-          width: 10,
-          height: 10,
-          borderRadius: 5,
-          marginHorizontal: 0,
-          backgroundColor: "#FFFFFF",
+    </SafeAreaView>
+  );
+};
+
+const HomeScreen = ({ navigation }) => {
+  const [index, setIndex] = useState(0);
+  const isCarousel = useRef(null);
+  return (
+    <SafeAreaView
+      style={{
+        flex: 1,
+        paddingVertical: 40,
+        alignItems: "center",
+      }}
+    >
+      <StatusBar style="auto" />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingBottom: 20,
         }}
-        inactiveDotOpacity={0.4}
-        inactiveDotScale={0.6}
-        tappableDots={true}
-      /> */}
+      >
+        <View style={{ paddingRight: 20 }}>
+          <Text variant="headlineLarge" style={{ fontWeight: "700" }}>
+            Upcoming
+          </Text>
+          <Text variant="headlineLarge" style={{ fontWeight: "700" }}>
+            Event
+          </Text>
+        </View>
+        <View style={{ paddingLeft: 20 }}>
+          <Text variant="titleLarge">Moon phase</Text>
+          <Text variant="titleLarge">Partial</Text>
+        </View>
+      </View>
+
+      <Carousel
+        layout="default"
+        layoutCardOffset={9}
+        ref={isCarousel}
+        data={data}
+        renderItem={CarouselItem}
+        sliderWidth={SLIDER_WIDTH}
+        itemWidth={ITEM_WIDTH}
+        inactiveSlideShift={0}
+        useScrollView={true}
+        onSnapToItem={(index) => setIndex(index)}
+      />
     </SafeAreaView>
   );
 };
