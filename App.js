@@ -11,6 +11,7 @@ import LocationFinder from "./screens/LocationFinder";
 import Globe from "./screens/Globe";
 import TimeMachine from "./screens/TimeMachine";
 import LocationContextProvider from "./context/LocationContext";
+import EventContextProvider from "./context/EventContext";
 
 export default function App() {
   const Tab = createMaterialBottomTabNavigator();
@@ -18,62 +19,64 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <LocationContextProvider>
-        <PaperProvider theme={MD3DarkTheme}>
-          <NavigationContainer theme={MD3DarkTheme}>
-            <Tab.Navigator initialRouteName="Home">
-              <Tab.Screen
-                name="Home"
-                component={HomeScreen}
-                options={{
-                  tabBarIcon: ({ color }) => (
-                    <FontAwesome5 name="home" size={20} color={color} />
-                  ),
-                }}
-              />
-              <Tab.Screen
-                name="Location"
-                component={LocationFinder}
-                options={{
-                  tabBarIcon: ({ color }) => (
-                    <Ionicons name="location" size={20} color={color} />
-                  ),
-                }}
-              />
-              <Tab.Screen
-                name="User"
-                component={UserProfile}
-                options={{
-                  tabBarIcon: ({ color }) => (
-                    <FontAwesome5 name="user-alt" size={20} color={color} />
-                  ),
-                }}
-              />
+        <EventContextProvider>
+          <PaperProvider theme={MD3DarkTheme}>
+            <NavigationContainer theme={MD3DarkTheme}>
+              <Tab.Navigator initialRouteName="Home">
+                <Tab.Screen
+                  name="Home"
+                  component={HomeScreen}
+                  options={{
+                    tabBarIcon: ({ color }) => (
+                      <FontAwesome5 name="home" size={20} color={color} />
+                    ),
+                  }}
+                />
+                <Tab.Screen
+                  name="Location"
+                  component={LocationFinder}
+                  options={{
+                    tabBarIcon: ({ color }) => (
+                      <Ionicons name="location" size={20} color={color} />
+                    ),
+                  }}
+                />
+                <Tab.Screen
+                  name="User"
+                  component={UserProfile}
+                  options={{
+                    tabBarIcon: ({ color }) => (
+                      <FontAwesome5 name="user-alt" size={20} color={color} />
+                    ),
+                  }}
+                />
 
-              <Tab.Screen
-                name="Globe"
-                component={Globe}
-                options={{
-                  tabBarIcon: ({ color }) => (
-                    <FontAwesome5
-                      name="globe-americas"
-                      size={20}
-                      color={color}
-                    />
-                  ),
-                }}
-              />
-              <Tab.Screen
-                name="Time Machine"
-                component={TimeMachine}
-                options={{
-                  tabBarIcon: ({ color }) => (
-                    <Ionicons name="timer" size={20} color={color} />
-                  ),
-                }}
-              />
-            </Tab.Navigator>
-          </NavigationContainer>
-        </PaperProvider>
+                <Tab.Screen
+                  name="Globe"
+                  component={Globe}
+                  options={{
+                    tabBarIcon: ({ color }) => (
+                      <FontAwesome5
+                        name="globe-americas"
+                        size={20}
+                        color={color}
+                      />
+                    ),
+                  }}
+                />
+                <Tab.Screen
+                  name="Time Machine"
+                  component={TimeMachine}
+                  options={{
+                    tabBarIcon: ({ color }) => (
+                      <Ionicons name="timer" size={20} color={color} />
+                    ),
+                  }}
+                />
+              </Tab.Navigator>
+            </NavigationContainer>
+          </PaperProvider>
+        </EventContextProvider>
       </LocationContextProvider>
     </SafeAreaProvider>
   );

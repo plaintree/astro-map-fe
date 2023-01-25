@@ -27,7 +27,13 @@ const LinkButton = ({ to, action, children, ...rest }) => {
   }
 
   return (
-    <Button onPress={onPress} {...props} {...rest}>
+    <Button
+      onPress={onPress}
+      {...props}
+      {...rest}
+      style={{ borderRadius: 10 }}
+      dark
+    >
       {children}
     </Button>
   );

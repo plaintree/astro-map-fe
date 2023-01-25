@@ -1,12 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { View, ScrollView } from "react-native";
-import {
-  Text,
-  SegmentedButtons,
-  List,
-  useTheme,
-  FAB,
-} from "react-native-paper";
+import { Text, SegmentedButtons, List, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { MarkerAnimated, Circle } from "react-native-maps";
 import worldLocations from "../data/worldLocations";
