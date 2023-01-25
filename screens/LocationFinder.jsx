@@ -1,12 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { View, ScrollView } from "react-native";
-import {
-  Text,
-  SegmentedButtons,
-  List,
-  useTheme,
-  FAB,
-} from "react-native-paper";
+import { Text, SegmentedButtons, List, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { MarkerAnimated, Circle } from "react-native-maps";
 import worldLocations from "../data/worldLocations";
@@ -20,6 +14,7 @@ const LocationFinder = ({ navigation }) => {
   const [value, setValue] = useState("");
   const theme = useTheme();
   const { userLocation, setUserLocation } = useContext(LocationContext);
+
   useEffect(() => {
     setPin({
       latitude: userLocation.latitude,
@@ -137,6 +132,7 @@ const LocationFinder = ({ navigation }) => {
           value={value}
           onValueChange={setValue}
           density="small"
+          style={{ marginHorizontal: 10 }}
           buttons={[
             {
               value: "north-america",
