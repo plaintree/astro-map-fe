@@ -94,6 +94,7 @@ const LocationFinder = ({ navigation }) => {
                   latitudeDelta: 0.05,
                   longitudeDelta: 50,
                 });
+                setUserLocation({});
               },
             },
             {
@@ -188,6 +189,10 @@ const LocationFinder = ({ navigation }) => {
                     longitude: location.coordinate.longitude,
                     latitudeDelta: 0.05,
                     longitudeDelta: 15,
+                  });
+                  setUserLocation({
+                    latitude: location.coordinate.latitude,
+                    longitude: location.coordinate.longitude,
                   });
                 }}
                 style={{
