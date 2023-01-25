@@ -9,9 +9,9 @@ import HomeScreen from "./screens/HomeScreen";
 import UserProfile from "./screens/UserProfile";
 import LocationFinder from "./screens/LocationFinder";
 import Globe from "./screens/Globe";
-import TimeMachine from "./screens/TimeMachine";
 import LocationContextProvider from "./context/LocationContext";
 import EventContextProvider from "./context/EventContext";
+import TimeMachineStack from "./screens/TimeMachineStack";
 
 export default function App() {
   const Tab = createMaterialBottomTabNavigator();
@@ -65,8 +65,8 @@ export default function App() {
                   }}
                 />
                 <Tab.Screen
-                  name="Time Machine"
-                  component={TimeMachine}
+                  name="Events"
+                  component={TimeMachineStack}
                   options={{
                     tabBarIcon: ({ color }) => (
                       <Ionicons name="timer" size={20} color={color} />

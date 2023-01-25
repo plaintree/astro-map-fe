@@ -14,6 +14,7 @@ const LocationFinder = ({ navigation }) => {
   const [value, setValue] = useState("");
   const theme = useTheme();
   const { userLocation, setUserLocation } = useContext(LocationContext);
+
   useEffect(() => {
     setPin({
       latitude: userLocation.latitude,
@@ -131,6 +132,7 @@ const LocationFinder = ({ navigation }) => {
           value={value}
           onValueChange={setValue}
           density="small"
+          style={{ marginHorizontal: 10 }}
           buttons={[
             {
               value: "north-america",

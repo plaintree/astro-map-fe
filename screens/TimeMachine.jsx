@@ -2,11 +2,12 @@ import { useState, useContext } from "react";
 import { Image, View, ScrollView } from "react-native";
 import { Text, Button, List, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import Banner from "../assets/timeMachineLogo.jpeg";
 import { EventContext } from "../context/EventContext";
+import LinkButton from "../components/LinkButton";
 
 const TimeMachine = ({ navigation }) => {
   const [showSelectDate, setShowSelectDate] = useState(false);
@@ -32,9 +33,9 @@ const TimeMachine = ({ navigation }) => {
         variant="headlineLarge"
         style={{ fontWeight: "700", textAlign: "center" }}
       >
-        TimeMachine
+        Time Machine
       </Text>
-      <Image
+      {/* <Image
         source={Banner}
         style={{
           height: 200,
@@ -44,13 +45,19 @@ const TimeMachine = ({ navigation }) => {
 
           marginVertical: 10,
         }}
+      /> */}
+      <MaterialCommunityIcons
+        name="timer-cog-outline"
+        size={200}
+        color={theme.colors.secondary}
+        style={{ textAlign: "center", marginVertical: 20 }}
       />
       <ScrollView style={{ paddingHorizontal: 50 }}>
         <Text
           variant="titleLarge"
           style={{ fontWeight: "700", textAlign: "center" }}
         >
-          Let's go back in time to the past astronomical events
+          Let's travel in time to view astronomical events
         </Text>
         <View>
           <Button
@@ -146,13 +153,12 @@ const TimeMachine = ({ navigation }) => {
           </List.Section>
         </View>
         {!expandList && (
-          <Button
-            dark
-            mode="contained-tonal"
+          <LinkButton
+            to={{ screen: "Single Event" }}
             disabled={accordion.title === "Type" ? true : false}
           >
             Continue
-          </Button>
+          </LinkButton>
         )}
       </ScrollView>
     </SafeAreaView>

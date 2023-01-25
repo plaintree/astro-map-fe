@@ -8,17 +8,7 @@ export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.8);
 
 const CarouselItem = ({ item, index }) => {
   return (
-    <SafeAreaView
-      style={
-        {
-          // borderRadius: 10,
-          // width: ITEM_WIDTH,
-          // paddingBottom: 0,
-          // height: "80%",
-        }
-      }
-      key={index}
-    >
+    <SafeAreaView key={index}>
       <Card
         mode="contained"
         elevation={3}
