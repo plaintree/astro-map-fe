@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { View, ScrollView, StyleSheet } from 'react-native';
 import MapView, { Marker } from "react-native-maps";
-import { Text, Card, Button, Avatar, TextInput, useTheme } from "react-native-paper";
+import { Text, Card, Button, Switch, Avatar, TextInput, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { EventContext } from "../context/EventContext";
@@ -21,11 +21,20 @@ const SingleEvent = () => {
         <Avatar.Icon style={{ marginRight: 10, backgroundColor: theme.colors.surfaceVariant }} size={40} icon={eventType.icon}/>
         <Text variant="headlineLarge" style={{ fontWeight: "700"}}>{eventType.title}</Text>
       </View>
-      <View style={{ paddingLeft: 30 }}>
-        <Text variant="headlineSmall" style={{ fontWeight: "700"}}>{userCountry}</Text>
-        <Text variant="headlineSmall" style={{ fontWeight: "700"}}>{date.toDateString()}</Text>
+      <View style={{ flexDirection: "row", paddingHorizontal: 30, alignItems: "center", justifyContent: "space-between" }}>
+        <View>
+          <Text variant="headlineSmall" style={{ fontWeight: "700"}}>{userCountry}</Text>
+          <Text variant="headlineSmall" style={{ fontWeight: "700"}}>{date.toDateString()}</Text>
+        </View>
+        <View style={{flexDirection: "row", alignItems: "center"}}>
+          <Text variant="titleMedium" >Map</Text>
+          <Switch 
+            value={showMap}
+            onValueChange={() => setShowMap((currentState) => !currentState)}
+          />
+        </View>
       </View>
-          <MapView
+          {showMap && <MapView
             provider="google"
             region={{
               latitude: userLocation.latitude,
@@ -35,7 +44,7 @@ const SingleEvent = () => {
             }}
             style={{ marginTop: 20, width: "85%", height: "25%", alignSelf: "center" }}
           >
-          </MapView>
+          </MapView>}
       <ScrollView style={{ marginTop: 30, marginHorizontal: 30 }}>
         <Card mode="elevated">
           <Card.Cover source={{ uri: "https://images.unsplash.com/photo-1503775012249-06a2b8cd00eb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1754&q=80" }}/>

@@ -89,7 +89,6 @@ const LocationFinder = ({ navigation }) => {
                   latitudeDelta: 0.05,
                   longitudeDelta: 50,
                 });
-                setUserLocation({});
               },
             },
             {
