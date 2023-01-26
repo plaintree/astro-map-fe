@@ -120,7 +120,11 @@ const TimeMachine = ({ navigation }) => {
                     title: "Solar Eclipse",
                     icon: "weather-sunny-off",
                   });
-                  setEventType("solar-eclipse");
+                  setEventType({
+                    title: "Solar Eclipse",
+                    icon: "weather-sunny-off",
+                    slug: "solar-eclipse",
+                  });
                 }}
               />
               <List.Item
@@ -134,7 +138,11 @@ const TimeMachine = ({ navigation }) => {
                     title: "Comet",
                     icon: "star-shooting-outline",
                   });
-                  setEventType("comet");
+                  setEventType({
+                    title: "Comet",
+                    icon: "star-shooting-outline",
+                    slug: "comet",
+                  });
                 }}
               />
               <List.Item
@@ -146,7 +154,11 @@ const TimeMachine = ({ navigation }) => {
                     title: "Meteor Shower",
                     icon: "shower-head",
                   });
-                  setEventType("meteor-shower");
+                  setEventType({
+                    title: "Meteor Shower",
+                    icon: "shower-head",
+                    slug: "meteor-shower",
+                  });
                 }}
               />
             </List.Accordion>

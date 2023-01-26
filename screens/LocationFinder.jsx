@@ -13,7 +13,7 @@ const LocationFinder = ({ navigation }) => {
   const [locations, setLocations] = useState([]);
   const [value, setValue] = useState("");
   const theme = useTheme();
-  const { userLocation, setUserLocation } = useContext(LocationContext);
+  const { userLocation, setUserLocation, setUserCountry } = useContext(LocationContext);
 
   useEffect(() => {
     setPin({
@@ -190,6 +190,7 @@ const LocationFinder = ({ navigation }) => {
                     latitude: location.coordinate.latitude,
                     longitude: location.coordinate.longitude,
                   });
+                  setUserCountry(location.countries);
                 }}
                 style={{
                   marginBottom: 5,
