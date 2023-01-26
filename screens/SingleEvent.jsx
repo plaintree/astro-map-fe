@@ -21,10 +21,12 @@ const SingleEvent = () => {
         <Avatar.Icon style={{ marginRight: 10, backgroundColor: theme.colors.surfaceVariant }} size={40} icon={eventType.icon}/>
         <Text variant="headlineLarge" style={{ fontWeight: "700"}}>{eventType.title}</Text>
       </View>
-      <View style={{ flexDirection: "row", paddingHorizontal: 30, alignItems: "center", justifyContent: "space-between" }}>
+      <View style={{ flexDirection: "row", paddingHorizontal: 30, alignItems: "flex-end", justifyContent: "space-between" }}>
         <View>
           <Text variant="headlineSmall" style={{ fontWeight: "700"}}>{userCountry}</Text>
           <Text variant="headlineSmall" style={{ fontWeight: "700"}}>{date.toDateString()}</Text>
+          <Text variant="titleMedium" style={{ marginTop: 10, fontWeight: "700"}}>Here is the next event</Text>
+          <Text variant="titleMedium" style={{ fontWeight: "700"}}>closest to this date:</Text>
         </View>
         <View style={{flexDirection: "row", alignItems: "center"}}>
           <Text variant="titleMedium" >Map</Text>
@@ -50,6 +52,7 @@ const SingleEvent = () => {
           <Card.Cover source={{ uri: "https://images.unsplash.com/photo-1503775012249-06a2b8cd00eb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1754&q=80" }}/>
           <Card.Content>
             <Text style={{ marginVertical: 10, fontWeight: "800" }} variant="titleLarge">{eventType.title}</Text>
+            <Text style={{ marginBottom: 10, fontStyle: "italic" }} variant="titleSmall">Jun 10 to Jun 21</Text>
             <Text variant="bodyMedium">At et invidunt sadipscing sit sanctus sanctus kasd, justo sed voluptua gubergren sed diam ipsum erat, diam vero amet sit kasd justo sea est. Rebum sanctus et ea gubergren dolores.</Text>
           </Card.Content>
           { !showCommentInput && <Card.Actions style={{marginVertical: 5, marginHorizontal: 5}}>
