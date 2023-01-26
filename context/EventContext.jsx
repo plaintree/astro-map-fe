@@ -1,7 +1,11 @@
 import { createContext, useState } from "react";
 
 export const EventContext = createContext({
-  eventType: "",
+  eventType: {
+    title: "",
+    icon: "",
+    slug: "",
+  },
   setEventType: () => {},
   date: "",
   setDate: () => {},

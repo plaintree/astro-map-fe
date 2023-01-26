@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { Image, View, ScrollView } from "react-native";
 import { Text, Button, List, useTheme } from "react-native-paper";
+import { DatePickerModal } from 'react-native-paper-dates';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -35,17 +36,6 @@ const TimeMachine = ({ navigation }) => {
       >
         Time Machine
       </Text>
-      {/* <Image
-        source={Banner}
-        style={{
-          height: 200,
-          width: "100%",
-          resizeMode: "cover",
-          alignSelf: "center",
-
-          marginVertical: 10,
-        }}
-      /> */}
       <MaterialCommunityIcons
         name="timer-cog-outline"
         size={200}
@@ -89,6 +79,15 @@ const TimeMachine = ({ navigation }) => {
               themeVariant="dark"
               display="default"
             />
+            // <DatePickerModal
+            //   locale="en"
+            //   mode="range"
+            //   visible={true}
+            //   onDismiss={() => setShowDatePicker(false)}
+            //   startDate={range.startDate}
+            //   endDate={range.endDate}
+            //   onConfirm={onConfirm}
+            // />
           )}
         </View>
         <View>
@@ -120,7 +119,11 @@ const TimeMachine = ({ navigation }) => {
                     title: "Solar Eclipse",
                     icon: "weather-sunny-off",
                   });
-                  setEventType("solar-eclipse");
+                  setEventType({
+                    title: "Solar Eclipse",
+                    icon: "weather-sunny-off",
+                    slug: "solar-eclipse",
+                  });
                 }}
               />
               <List.Item
@@ -134,7 +137,11 @@ const TimeMachine = ({ navigation }) => {
                     title: "Comet",
                     icon: "star-shooting-outline",
                   });
-                  setEventType("comet");
+                  setEventType({
+                    title: "Comet",
+                    icon: "star-shooting-outline",
+                    slug: "comet",
+                  });
                 }}
               />
               <List.Item
@@ -146,7 +153,11 @@ const TimeMachine = ({ navigation }) => {
                     title: "Meteor Shower",
                     icon: "shower-head",
                   });
-                  setEventType("meteor-shower");
+                  setEventType({
+                    title: "Meteor Shower",
+                    icon: "shower-head",
+                    slug: "meteor-shower",
+                  });
                 }}
               />
             </List.Accordion>

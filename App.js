@@ -4,6 +4,8 @@ import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { enGB, registerTranslation } from "react-native-paper-dates";
+registerTranslation("en-GB", enGB);
 
 import HomeScreen from "./screens/HomeScreen";
 import UserProfile from "./screens/UserProfile";
