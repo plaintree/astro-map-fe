@@ -1,12 +1,10 @@
 import { useState, useContext } from "react";
-import { Image, View, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 import { Text, Button, List, useTheme } from "react-native-paper";
-import { DatePickerModal } from 'react-native-paper-dates';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-import Banner from "../assets/timeMachineLogo.jpeg";
 import { EventContext } from "../context/EventContext";
 import LinkButton from "../components/LinkButton";
 
@@ -79,15 +77,6 @@ const TimeMachine = ({ navigation }) => {
               themeVariant="dark"
               display="default"
             />
-            // <DatePickerModal
-            //   locale="en"
-            //   mode="range"
-            //   visible={true}
-            //   onDismiss={() => setShowDatePicker(false)}
-            //   startDate={range.startDate}
-            //   endDate={range.endDate}
-            //   onConfirm={onConfirm}
-            // />
           )}
         </View>
         <View>
