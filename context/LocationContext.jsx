@@ -1,6 +1,8 @@
 import { createContext, useState, useEffect } from "react";
 import * as Location from "expo-location";
 
+import testData from "../data/testData";
+
 export const LocationContext = createContext({
   userLocation: {},
   setUserLocation: ()=>{},
