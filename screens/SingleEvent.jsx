@@ -1,11 +1,14 @@
 import { useState, useContext } from "react";
-import { View, ScrollView, StyleSheet } from 'react-native';
-import MapView, { Marker } from "react-native-maps";
+import { View, Image, ScrollView, StyleSheet } from 'react-native';
+import MapView, { Marker, Circle } from "react-native-maps";
 import { Text, Card, Button, Switch, Avatar, TextInput, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { EventContext } from "../context/EventContext";
 import { LocationContext } from "../context/LocationContext";
+
+import testData from "../data/testData";
+import eventInformation from "../data/eventInformation";
 
 const SingleEvent = () => {
   const { eventType, date } = useContext(EventContext);
@@ -14,6 +17,8 @@ const SingleEvent = () => {
   const [ showCommentInput, setShowCommentInput ] = useState(false);
   const [ showMap, setShowMap ] = useState(false);
   const theme = useTheme();
+  
+  const [ currEvent, setCurrEvent ] = useState(testData[0]);
 
   return (
     <SafeAreaView style={{flex: 1, paddingTop: 40}}>
@@ -42,18 +47,42 @@ const SingleEvent = () => {
               latitude: userLocation.latitude,
               longitude: userLocation.longitude,
               latitudeDelta: 0.05,
-              longitudeDelta: 100,
+              longitudeDelta: 75,
             }}
             style={{ marginTop: 20, width: "85%", height: "25%", alignSelf: "center" }}
           >
+            {currEvent.coordinateData.map((tick, i) => {
+              return (
+                <View key={i}>
+                  <Circle  
+                    center={{
+                      latitude: tick.centerCoordinates.latitude,
+                      longitude: tick.centerCoordinates.longitude,
+                      }} 
+                    radius={tick.pathWidth * 1000}
+                    strokeColor="red"
+                    fillColor="red"
+                  />
+                  <Circle
+                    center={{
+                      latitude: tick.centerCoordinates.latitude,
+                      longitude: tick.centerCoordinates.longitude,
+                      }} 
+                    radius={tick.pathWidth * 4000}
+                    strokeColor="red"
+                  />
+                </View>
+              )
+            })}
           </MapView>}
       <ScrollView style={{ marginTop: 30, marginHorizontal: 30 }}>
         <Card mode="elevated">
           <Card.Cover source={{ uri: "https://images.unsplash.com/photo-1503775012249-06a2b8cd00eb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1754&q=80" }}/>
           <Card.Content>
-            <Text style={{ marginVertical: 10, fontWeight: "800" }} variant="titleLarge">{eventType.title}</Text>
-            <Text style={{ marginBottom: 10, fontStyle: "italic" }} variant="titleSmall">Jun 10 to Jun 21</Text>
-            <Text variant="bodyMedium">At et invidunt sadipscing sit sanctus sanctus kasd, justo sed voluptua gubergren sed diam ipsum erat, diam vero amet sit kasd justo sea est. Rebum sanctus et ea gubergren dolores.</Text>
+            <Text style={{ marginTop: 10, fontWeight: "800" }} variant="titleLarge">{eventType.title}</Text>
+            <Text variant="titleSmall">({currEvent.type})</Text>
+            <Text style={{ marginBottom: 10, fontStyle: "italic" }} variant="titleSmall">{currEvent.date.slice(7)} {currEvent.date.slice(4, 7)} {currEvent.date.slice(0, 4)}</Text>
+            <Text variant="bodyMedium">{eventInformation[currEvent.type].desc}</Text>
           </Card.Content>
           { !showCommentInput && <Card.Actions style={{marginVertical: 5, marginHorizontal: 5}}>
             <Button mode="contained-tonal" dark onPress={() => setShowCommentInput(true)}>Comment</Button>
