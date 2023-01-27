@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { View, ScrollView } from "react-native";
 import { Text, SegmentedButtons, List, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import MapView, { MarkerAnimated, Circle } from "react-native-maps";
+import MapView, { MarkerAnimated } from "react-native-maps";
 import worldLocations from "../data/worldLocations";
 import { LocationContext } from "../context/LocationContext";
 
@@ -13,7 +13,8 @@ const LocationFinder = ({ navigation }) => {
   const [locations, setLocations] = useState([]);
   const [value, setValue] = useState("");
   const theme = useTheme();
-  const { userLocation, setUserLocation, setUserCountry } = useContext(LocationContext);
+  const { userLocation, setUserLocation, setUserCountry } =
+    useContext(LocationContext);
 
   useEffect(() => {
     setPin({
