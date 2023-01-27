@@ -1,8 +1,9 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { View, Image, ScrollView, StyleSheet } from 'react-native';
 import MapView, { Marker, Circle } from "react-native-maps";
 import { Text, Card, Button, Switch, Avatar, TextInput, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import moment from "moment";
 
 import { EventContext } from "../context/EventContext";
 import { LocationContext } from "../context/LocationContext";
@@ -18,7 +19,33 @@ const SingleEvent = () => {
   const [ showMap, setShowMap ] = useState(false);
   const theme = useTheme();
   
-  const [ currEvent, setCurrEvent ] = useState(testData[0]);
+  const [ currEvent, setCurrEvent ] = useState({});
+  const [ eventInfo, setEventInfo ] = useState({});
+
+  useEffect(() => {
+    
+    const calculateCurrentEvent = async() => {
+      const formattedDate = moment(date)
+
+      const timeDiff = await testData.map((event) => {
+        const formattedEventDate = moment(event.date, "YYYYMMMDD")
+        return moment.duration(formattedEventDate.diff(formattedDate)).asDays();
+      })
+  
+      const filteredDiff = await timeDiff.filter((x) => x > 0);
+  
+      const nextEvent = await testData[timeDiff.indexOf(Math.min(...filteredDiff))];
+
+      const currEventInfo = await eventInformation.filter((event) => event.type === nextEvent.type);
+
+      setEventInfo(currEventInfo[0]);
+      setCurrEvent(nextEvent);
+    };
+
+    calculateCurrentEvent();
+
+  }, [])
+
 
   return (
     <SafeAreaView style={{flex: 1, paddingTop: 40}}>
@@ -81,8 +108,8 @@ const SingleEvent = () => {
           <Card.Content>
             <Text style={{ marginTop: 10, fontWeight: "800" }} variant="titleLarge">{eventType.title}</Text>
             <Text variant="titleSmall">({currEvent.type})</Text>
-            <Text style={{ marginBottom: 10, fontStyle: "italic" }} variant="titleSmall">{currEvent.date.slice(7)} {currEvent.date.slice(4, 7)} {currEvent.date.slice(0, 4)}</Text>
-            <Text variant="bodyMedium">{eventInformation[currEvent.type].desc}</Text>
+            <Text style={{ marginBottom: 10, fontStyle: "italic" }} variant="titleSmall">{moment(currEvent?.date, 'YYYYMMMDD').format("MMM DD YYYY")}</Text>
+            <Text variant="bodyMedium">{eventInfo.desc}</Text>
           </Card.Content>
           { !showCommentInput && <Card.Actions style={{marginVertical: 5, marginHorizontal: 5}}>
             <Button mode="contained-tonal" dark onPress={() => setShowCommentInput(true)}>Comment</Button>
