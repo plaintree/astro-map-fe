@@ -7,7 +7,7 @@ import { Avatar } from "react-native-paper";
 import { UserContext } from "../context/UserContext";
 
 const UserProfile = ({ navigation }) => {
-  const {userName, favouriteType, setFavoriteType, avatarUrl, isLogin, setIsLogin} = useContext(UserContext);
+  const {userName, setFavoriteType, avatarUrl, setIsLogin} = useContext(UserContext);
   const [expandList, setExpandList] = useState(false);
   const [accordion, setAccordion] = useState({
     title: "Type",
@@ -80,7 +80,8 @@ const UserProfile = ({ navigation }) => {
             </List.Accordion>
           </List.Section>
         <Button mode="contained" style={{marginTop: 40}} onPress={() => {
-          setIsLogin(false)
+          setIsLogin(false);
+          setFavoriteType("");
           }}
         >Sign out</Button>
         </ScrollView>

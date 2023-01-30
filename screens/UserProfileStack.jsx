@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StackActions } from "@react-navigation/native";
 import UserProfile from "./UserProfile";
 import UserRegister from "./UserRegister";
 
