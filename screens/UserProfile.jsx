@@ -81,7 +81,6 @@ const UserProfile = ({ navigation }) => {
           </List.Section>
         <Button mode="contained" style={{marginTop: 40}} onPress={() => {
           setIsLogin(false)
-          navigation.goBack();
           }}
         >Sign out</Button>
         </ScrollView>

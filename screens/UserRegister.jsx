@@ -38,7 +38,6 @@ const UserRegister = ({ navigation }) => {
 
   const handleLogin = () => {
     setIsLogin(true);
-    navigation.navigate("User Profile");
   }
 
   // ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$
