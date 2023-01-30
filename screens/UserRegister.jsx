@@ -22,6 +22,7 @@ const UserRegister = ({ navigation }) => {
       setUserName(usernameInput);
       setIsLogin(true);
       setInvalidMsg(null);
+      navigation.navigate("User Profile");
     } else if (!regUsername.test(usernameInput.trim())) {
       setInvalidMsg(
         "Username must be at least 8 characters long with one uppercase"
@@ -34,6 +35,11 @@ const UserRegister = ({ navigation }) => {
     setPasswordInput("");
     setUsernameInput("");
   };
+
+  const handleLogin = () => {
+    setIsLogin(true);
+    navigation.navigate("User Profile");
+  }
 
   // ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$
   return (
@@ -85,7 +91,7 @@ const UserRegister = ({ navigation }) => {
         </Text>
       )}
       <View style={{ flexDirection: "row", marginTop: 10 }}>
-        <Button mode="contained" style={{ marginRight: 10 }}>
+        <Button mode="contained" style={{ marginRight: 10 }} onPress={handleLogin}>
           Sign In
         </Button>
         <Button mode="contained-tonal" onPress={handleRegister}>
@@ -101,7 +107,6 @@ const UserRegister = ({ navigation }) => {
           paddingHorizontal: 20,
         }}
       >
-        {usernameInput} {passwordInput}
       </Text>
     </SafeAreaView>
   );
