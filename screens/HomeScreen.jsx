@@ -13,8 +13,11 @@ import CarouselItem, {
 import data from "../data";
 import moment from "moment";
 
-const HomeScreen = ({ navigation }) => {
-  const [moonPhase, setMoonPhase] = useState("");
+const HomeScreen = () => {
+  const [ moonPhase, setMoonPhase ] = useState("");
+  const [ events, setEvents ] = useState([]);
+  const [ isLoading, setIsLoading ] = useState(false);
+  
   useEffect(() => {
     const getMoonPhase = async () => {
       try {
@@ -29,6 +32,24 @@ const HomeScreen = ({ navigation }) => {
     };
     getMoonPhase();
   }, []);
+
+  useEffect(() => {
+    
+    const getEvents = async () => {
+      const today = moment().format("YYYY-MM-DD");
+      try {
+        setIsLoading(true);
+        const response = await axios.get('https://astro-map-be.onrender.com/api/eclipses/hybrid')
+        setEvents(response.data.filter((event) => moment(event.date).isAfter(today, 'year')));
+        
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getEvents();
+  }, []);
+
+  console.log(events);
 
   const isCarousel = useRef(null);
 
@@ -81,7 +102,7 @@ const HomeScreen = ({ navigation }) => {
         layout="default"
         layoutCardOffset={9}
         ref={isCarousel}
-        data={data}
+        data={events}
         renderItem={CarouselItem}
         sliderWidth={SLIDER_WIDTH}
         itemWidth={ITEM_WIDTH}

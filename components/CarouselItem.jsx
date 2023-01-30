@@ -1,12 +1,14 @@
 import { StyleSheet, Dimensions, Image } from "react-native";
 import { Avatar, Button, Card, Text } from "react-native-paper";
 
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import LinkButton from "./LinkButton";
 export const SLIDER_WIDTH = Dimensions.get("window").width * 1;
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.8);
 
 const CarouselItem = ({ item, index }) => {
+
   return (
     <SafeAreaView key={index}>
       <Card
@@ -15,7 +17,7 @@ const CarouselItem = ({ item, index }) => {
         onPress={() => navigation.navigate("User")}
       >
         <Card.Cover source={{ uri: item.imgUrl }} />
-        <Card.Title title={item.title} titleVariant="titleLarge" />
+        <Card.Title title={item.type} titleVariant="titleLarge" />
         <Card.Content style={{ paddingBottom: 10 }}>
           <Text variant="bodyMedium">{item.body}</Text>
         </Card.Content>
