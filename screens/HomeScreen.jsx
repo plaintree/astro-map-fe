@@ -1,5 +1,5 @@
 import axios from "axios";
-import { View } from "react-native";
+import { View, ScrollView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Text } from "react-native-paper";
@@ -39,8 +39,8 @@ const HomeScreen = () => {
       const today = moment().format("YYYY-MM-DD");
       try {
         setIsLoading(true);
-        const response = await axios.get('https://astro-map-be.onrender.com/api/eclipses/hybrid')
-        setEvents(response.data.filter((event) => moment(event.date).isAfter(today, 'year')));
+        const response = await axios.get(`https://astro-map-be.onrender.com/api/eclipses/all/${today}`)
+        setEvents(response.data);
         
       } catch (error) {
         console.log(error);
@@ -48,8 +48,6 @@ const HomeScreen = () => {
     }
     getEvents();
   }, []);
-
-  console.log(events);
 
   const isCarousel = useRef(null);
 
@@ -65,7 +63,7 @@ const HomeScreen = () => {
     <SafeAreaView
       style={{
         flex: 1,
-        paddingVertical: 40,
+        paddingTop: 40,
         alignItems: "center",
       }}
     >
@@ -97,18 +95,19 @@ const HomeScreen = () => {
           </Text>
         </View>
       </View>
-
-      <Carousel
-        layout="default"
-        layoutCardOffset={9}
-        ref={isCarousel}
-        data={events}
-        renderItem={CarouselItem}
-        sliderWidth={SLIDER_WIDTH}
-        itemWidth={ITEM_WIDTH}
-        inactiveSlideShift={0}
-        useScrollView={true}
-      />
+      <ScrollView>
+        <Carousel
+          layout="default"
+          layoutCardOffset={9}
+          ref={isCarousel}
+          data={events}
+          renderItem={CarouselItem}
+          sliderWidth={SLIDER_WIDTH}
+          itemWidth={ITEM_WIDTH}
+          inactiveSlideShift={0}
+          useScrollView={true}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };

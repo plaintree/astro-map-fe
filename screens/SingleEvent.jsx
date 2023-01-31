@@ -4,15 +4,15 @@ import MapView, { Marker, Circle } from "react-native-maps";
 import { Text, Card, Button, Switch, Avatar, TextInput, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import moment from "moment";
+import axios from 'axios';
 
 import { EventContext } from "../context/EventContext";
 import { LocationContext } from "../context/LocationContext";
 
-import testData from "../data/testData";
 import eventInformation from "../data/eventInformation";
 
-const SingleEvent = () => {
-  const { eventType, date } = useContext(EventContext);
+const SingleEvent = ({ route }) => {
+  const { eventType, setEventType, date } = useContext(EventContext);
   const { userLocation, userCountry } = useContext(LocationContext);
   const [ text, setText ] = useState("");
   const [ showCommentInput, setShowCommentInput ] = useState(false);
@@ -22,30 +22,65 @@ const SingleEvent = () => {
   const [ currEvent, setCurrEvent ] = useState({});
   const [ eventInfo, setEventInfo ] = useState({});
 
+  const { id } = route.params
+
   useEffect(() => {
     
-    const calculateCurrentEvent = async() => {
-      const formattedDate = moment(date)
-
-      const timeDiff = await testData.map((event) => {
-        const formattedEventDate = moment(event.date, "YYYYMMMDD")
-        return moment.duration(formattedEventDate.diff(formattedDate)).asDays();
-      })
+    if (id !== undefined) {
+      const getEvents = async () => {
+        try {
+          const response = await axios.get(`https://astro-map-be.onrender.com/api/eclipses/all/${id}`)
+          const formattedDate = moment(id, "YYYY-MM-DD")
   
-      const filteredDiff = await timeDiff.filter((x) => x > 0);
+          const timeDiff = response.data.map((event) => {
+            const formattedEventDate = moment(event.date, "YYYY-MM-DD")
+            return moment.duration(formattedEventDate.diff(formattedDate)).asDays();
+          })
+      
+          const filteredDiff = timeDiff.filter((x) => x >= 0);
+      
+          const nextEvent = response.data[timeDiff.indexOf(Math.min(...filteredDiff))];
+          
+          const currEventInfo = eventInformation.filter((event) => event.type === nextEvent.type);
+
+          setEventInfo(currEventInfo[0]);
+          setCurrEvent(nextEvent);  
+          setEventType((currEventType) => ({...currEventType, type: nextEvent.type}))
+
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        getEvents();
+    } else {
+      const getEvents = async () => {
+        try {
+          const inputDate = moment(date).format("YYYY-MM-DD");
+          const response = await axios.get(`https://astro-map-be.onrender.com/api/eclipses/all/${inputDate}`)
+          const formattedDate = moment(inputDate, "YYYY-MM-DD")
   
-      const nextEvent = await testData[timeDiff.indexOf(Math.min(...filteredDiff))];
+          const timeDiff = response.data.map((event) => {
+            const formattedEventDate = moment(event.date, "YYYY-MM-DD")
+            return moment.duration(formattedEventDate.diff(formattedDate)).asDays();
+          })
+      
+          const filteredDiff = timeDiff.filter((x) => x >= 0);
+      
+          const nextEvent = response.data[timeDiff.indexOf(Math.min(...filteredDiff))];
+    
+          const currEventInfo = eventInformation.filter((event) => event.type === nextEvent.type);
+    
+          setEventInfo(currEventInfo[0]);
+          setCurrEvent(nextEvent);
+          setEventType((currEventType) => ({...currEventType, type: nextEvent.type}))
 
-      const currEventInfo = await eventInformation.filter((event) => event.type === nextEvent.type);
-
-      setEventInfo(currEventInfo[0]);
-      setCurrEvent(nextEvent);
-    };
-
-    calculateCurrentEvent();
-
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      getEvents();
+    }
   }, [])
-
 
   return (
     <SafeAreaView style={{flex: 1, paddingTop: 40}}>
@@ -104,10 +139,10 @@ const SingleEvent = () => {
           </MapView>}
       <ScrollView style={{ marginTop: 30, marginHorizontal: 30 }}>
         <Card mode="elevated">
-          <Card.Cover source={{ uri: "https://images.unsplash.com/photo-1503775012249-06a2b8cd00eb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1754&q=80" }}/>
+          <Card.Cover source={{ uri: eventInfo.imageURL }}/>
           <Card.Content>
             <Text style={{ marginTop: 10, fontWeight: "800" }} variant="titleLarge">{eventType.title}</Text>
-            <Text variant="titleSmall">({currEvent.type})</Text>
+            <Text variant="titleSmall">({eventInfo.type})</Text>
             <Text style={{ marginBottom: 10, fontStyle: "italic" }} variant="titleSmall">{moment(currEvent?.date, 'YYYYMMMDD').format("MMM DD YYYY")}</Text>
             <Text variant="bodyMedium">{eventInfo.desc}</Text>
           </Card.Content>
