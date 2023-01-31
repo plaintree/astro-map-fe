@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { View, ScrollView } from "react-native";
+import { ActivityIndicator, IconButton } from "react-native-paper";
 import MapView, { Circle } from "react-native-maps";
 import {
   Text,
@@ -16,15 +17,22 @@ import axios from "axios";
 
 import { EventContext } from "../context/EventContext";
 import { LocationContext } from "../context/LocationContext";
+import { UserContext } from "../context/UserContext";
+
+import CommentList from "../components/CommentList";
 
 import eventInformation from "../data/eventInformation";
+import commentData from "../data/commentData";
 
 const SingleEvent = ({ route }) => {
-  const { eventType, setEventType, date, setDate } = useContext(EventContext);
-  const { userLocation, userCountry } = useContext(LocationContext);
+  const { eventType, setEventType, date } = useContext(EventContext);
+  const { avatarUrl, userName } = useContext(UserContext);
+  const { userCountry } = useContext(LocationContext);
   const [text, setText] = useState("");
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [showMap, setShowMap] = useState(false);
+  const [isFav, setIsFav] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
 
   const [currEvent, setCurrEvent] = useState({});
@@ -70,6 +78,7 @@ const SingleEvent = ({ route }) => {
     } else {
       const getEvents = async () => {
         try {
+          setIsLoading(true);
           const inputDate = moment(date).format("YYYY-MM-DD");
           const response = await axios.get(
             `https://astro-map-be.onrender.com/api/eclipses/`
@@ -98,6 +107,7 @@ const SingleEvent = ({ route }) => {
             ...currEventType,
             type: nextEvent.type,
           }));
+          setIsLoading(false);
         } catch (error) {
           console.log(error);
         }
@@ -167,7 +177,7 @@ const SingleEvent = ({ route }) => {
           />
         </View>
       </View>
-      {showMap && (
+      {showMap && !isLoading && (
         <MapView
           provider="google"
           region={{
@@ -192,8 +202,8 @@ const SingleEvent = ({ route }) => {
                     longitude: tick.centerCoordinates.longitude,
                   }}
                   radius={tick.pathWidth * 1000}
-                  strokeColor="red"
-                  fillColor="red"
+                  strokeColor="#f4433640"
+                  fillColor="#f4433666"
                 />
                 <Circle
                   center={{
@@ -208,63 +218,111 @@ const SingleEvent = ({ route }) => {
           })}
         </MapView>
       )}
-      <ScrollView style={{ marginTop: 30, marginHorizontal: 30 }}>
-        <Card mode="elevated">
-          <Card.Cover source={{ uri: eventInfo.imageURL }} />
-          <Card.Content>
-            <Text
-              style={{ marginTop: 10, fontWeight: "800" }}
-              variant="titleLarge"
-            >
-              {eventType.title}
-            </Text>
-            <Text variant="titleSmall" style={{ textTransform: "capitalize" }}>
-              {eventInfo.type}
-            </Text>
-            <Text
-              style={{ marginBottom: 10, fontStyle: "italic" }}
-              variant="titleSmall"
-            >
-              {moment(currEvent?.date, "YYYY-MM-DD").format("DD MMM YYYY")}
-            </Text>
-            <Text variant="bodyMedium">{eventInfo.desc}</Text>
-          </Card.Content>
-          {!showCommentInput && (
-            <Card.Actions style={{ marginVertical: 5, marginHorizontal: 5 }}>
-              <Button
-                mode="contained-tonal"
-                dark
-                onPress={() => setShowCommentInput(true)}
+      {isLoading ? (
+        <ActivityIndicator
+          animating={true}
+          size="large"
+          style={{ flex: 1, alignSelf: "center", justifyContent: "center" }}
+        />
+      ) : (
+        <ScrollView style={{ marginTop: 30, marginHorizontal: 30 }}>
+          <Card mode="elevated">
+            <Card.Cover source={{ uri: eventInfo.imageURL }} />
+            <Card.Content>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
-                Comment
-              </Button>
-            </Card.Actions>
-          )}
-          {showCommentInput && (
-            <>
-              <TextInput
-                mode="outlined"
-                label="Enter comment..."
-                style={{ marginVertical: 10 }}
-                multiline
-                value={text}
-                onChangeText={(text) => setText(text)}
-              />
-              <Card.Actions>
-                <Button>Submit</Button>
+                <View>
+                  <Text
+                    style={{ marginTop: 10, fontWeight: "800" }}
+                    variant="titleLarge"
+                  >
+                    {eventType.title}
+                  </Text>
+                  <Text
+                    variant="titleSmall"
+                    style={{ textTransform: "capitalize" }}
+                  >
+                    {eventInfo.type}
+                  </Text>
+                  <Text
+                    style={{ marginBottom: 10, fontStyle: "italic" }}
+                    variant="titleSmall"
+                  >
+                    {moment(currEvent?.date, "YYYY-MM-DD").format(
+                      "DD MMM YYYY"
+                    )}
+                  </Text>
+                </View>
+                {isFav ? (
+                  <IconButton
+                    size={24}
+                    mode="contained-tonal"
+                    icon="star"
+                    onPress={() => setIsFav((currStar) => !currStar)}
+                  />
+                ) : (
+                  <IconButton
+                    size={24}
+                    mode="contained-tonal"
+                    icon="star-outline"
+                    onPress={() => setIsFav((currStar) => !currStar)}
+                  />
+                )}
+              </View>
+
+              <Text variant="bodyMedium">{eventInfo.desc}</Text>
+            </Card.Content>
+            {!showCommentInput && (
+              <Card.Actions style={{ marginVertical: 5, marginHorizontal: 5 }}>
                 <Button
-                  onPress={() => {
-                    setShowCommentInput(false);
-                    setText("");
-                  }}
+                  mode="contained-tonal"
+                  dark
+                  onPress={() => setShowCommentInput(true)}
                 >
-                  Cancel
+                  Comment
                 </Button>
               </Card.Actions>
-            </>
-          )}
-        </Card>
-      </ScrollView>
+            )}
+            {showCommentInput && (
+              <>
+                <Card.Content style={{ marginVertical: 20 }}>
+                  {commentData.map((comm) => (
+                    <CommentList comment={comm} key={comm.id} />
+                  ))}
+                </Card.Content>
+                <TextInput
+                  mode="outlined"
+                  label="Enter comment..."
+                  style={{
+                    marginBottom: 10,
+                    width: "90%",
+                    alignSelf: "center",
+                  }}
+                  multiline
+                  value={text}
+                  onChangeText={(text) => setText(text)}
+                />
+                <Card.Actions>
+                  <Button>Submit</Button>
+                  <Button
+                    onPress={() => {
+                      setShowCommentInput(false);
+                      setText("");
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Card.Actions>
+              </>
+            )}
+          </Card>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };

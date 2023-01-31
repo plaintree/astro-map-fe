@@ -1,8 +1,7 @@
 import axios from "axios";
 import { View, ScrollView } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Text } from "react-native-paper";
+import { Text, ActivityIndicator } from "react-native-paper";
 import { useRef, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Carousel from "react-native-snap-carousel";
@@ -41,6 +40,7 @@ const HomeScreen = () => {
           `https://astro-map-be.onrender.com/api/eclipses/all/${today}`
         );
         setEvents(response.data);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -66,7 +66,6 @@ const HomeScreen = () => {
         alignItems: "center",
       }}
     >
-      <StatusBar style="auto" />
       <View
         style={{
           flexDirection: "row",
@@ -94,19 +93,27 @@ const HomeScreen = () => {
           </Text>
         </View>
       </View>
-      <ScrollView>
-        <Carousel
-          layout="default"
-          layoutCardOffset={9}
-          ref={isCarousel}
-          data={events}
-          renderItem={CarouselItem}
-          sliderWidth={SLIDER_WIDTH}
-          itemWidth={ITEM_WIDTH}
-          inactiveSlideShift={0}
-          useScrollView={true}
+      {isLoading ? (
+        <ActivityIndicator
+          animating={true}
+          size="large"
+          style={{ flex: 1, alignSelf: "center", justifyContent: "center" }}
         />
-      </ScrollView>
+      ) : (
+        <ScrollView>
+          <Carousel
+            layout="default"
+            layoutCardOffset={9}
+            ref={isCarousel}
+            data={events}
+            renderItem={CarouselItem}
+            sliderWidth={SLIDER_WIDTH}
+            itemWidth={ITEM_WIDTH}
+            inactiveSlideShift={0}
+            useScrollView={true}
+          />
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
