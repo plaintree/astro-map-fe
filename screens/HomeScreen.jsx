@@ -10,14 +10,13 @@ import CarouselItem, {
   SLIDER_WIDTH,
   ITEM_WIDTH,
 } from "../components/CarouselItem";
-import data from "../data";
 import moment from "moment";
 
 const HomeScreen = () => {
-  const [ moonPhase, setMoonPhase ] = useState("");
-  const [ events, setEvents ] = useState([]);
-  const [ isLoading, setIsLoading ] = useState(false);
-  
+  const [moonPhase, setMoonPhase] = useState("");
+  const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const getMoonPhase = async () => {
       try {
@@ -34,18 +33,18 @@ const HomeScreen = () => {
   }, []);
 
   useEffect(() => {
-    
     const getEvents = async () => {
       const today = moment().format("YYYY-MM-DD");
       try {
         setIsLoading(true);
-        const response = await axios.get(`https://astro-map-be.onrender.com/api/eclipses/all/${today}`)
+        const response = await axios.get(
+          `https://astro-map-be.onrender.com/api/eclipses/all/${today}`
+        );
         setEvents(response.data);
-        
       } catch (error) {
         console.log(error);
       }
-    }
+    };
     getEvents();
   }, []);
 

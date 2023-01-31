@@ -9,7 +9,6 @@ import UserProfileStack from "./screens/UserProfileStack";
 import TimeMachineStack from "./screens/TimeMachineStack";
 import HomeScreenStack from "./screens/HomeScreenStack";
 import LocationFinder from "./screens/LocationFinder";
-import Globe from "./screens/Globe";
 
 import LocationContextProvider from "./context/LocationContext";
 import EventContextProvider from "./context/EventContext";
@@ -54,19 +53,6 @@ export default function App() {
                     }}
                   />
 
-                  <Tab.Screen
-                    name="Globe"
-                    component={Globe}
-                    options={{
-                      tabBarIcon: ({ color }) => (
-                        <FontAwesome5
-                          name="globe-americas"
-                          size={20}
-                          color={color}
-                        />
-                      ),
-                    }}
-                  />
                   <Tab.Screen
                     name="Events"
                     component={TimeMachineStack}
