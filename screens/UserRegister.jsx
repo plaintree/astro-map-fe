@@ -76,6 +76,7 @@ const UserRegister = ({ navigation }) => {
       <TextInput
         mode="outlined"
         label="Username"
+        editable={isLoggingIn || isRegistering ? false : true}
         style={{ width: "80%" }}
         value={usernameInput}
         onChangeText={(text) => setUsernameInput(text.trim())}
@@ -84,6 +85,7 @@ const UserRegister = ({ navigation }) => {
         mode="outlined"
         label="Password"
         secureTextEntry={showPassword ? false : true}
+        editable={isLoggingIn || isRegistering ? false : true}
         value={passwordInput}
         onChangeText={(text) => setPasswordInput(text)}
         style={{ width: "80%" }}
