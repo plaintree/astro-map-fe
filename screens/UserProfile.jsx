@@ -1,9 +1,10 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { View, ScrollView, Image } from "react-native";
 import { List, Text, Button, useTheme, Card } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Avatar } from "react-native-paper";
 import moment from "moment";
+import axios from "axios";
 
 import { UserContext } from "../context/UserContext";
 import { EventContext } from "../context/EventContext";
@@ -15,11 +16,28 @@ const UserProfile = ({ navigation }) => {
   const { userName, setFavoriteType, avatarUrl, setIsLogin, favEvents } =
     useContext(UserContext);
   const [expandList, setExpandList] = useState(false);
+  const [listFavEvents, setListFavEvents] = useState([]);
   const [accordion, setAccordion] = useState({
     title: "Type",
     icon: "orbit",
   });
   const theme = useTheme();
+  useEffect(() => {
+    try {
+      const getEvents = async () => {
+        const res = await axios.get(
+          `https://astro-map-be.onrender.com/api/eclipses/`
+        );
+        const filteredResult = res.data.filter((ev) =>
+          favEvents.includes(ev.date)
+        );
+        setListFavEvents(filteredResult);
+      };
+      getEvents();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [favEvents]);
 
   const getEventImageURL = (type) => {
     let imageURL;
@@ -113,7 +131,15 @@ const UserProfile = ({ navigation }) => {
         >
           Your favourite collection
         </Text>
-        {favEvents.map((ev) => (
+        {favEvents.length === 0 && (
+          <Text
+            variant="titleMedium"
+            style={{ fontWeight: "700", textAlign: "center" }}
+          >
+            You don't have any favorite events
+          </Text>
+        )}
+        {listFavEvents.map((ev) => (
           <View
             key={ev._id}
             style={{
