@@ -10,8 +10,6 @@ export const EventContext = createContext({
   setEventType: () => {},
   date: "",
   setDate: () => {},
-  // eventCoordinates: [],
-  // setEventCoordinates: () => {},
 });
 
 const EventContextProvider = ({ children }) => {
@@ -22,7 +20,6 @@ const EventContextProvider = ({ children }) => {
     slug: "solar-eclipse",
   });
   const [date, setDate] = useState(new Date());
-  // const [eventCoordinates, setEventCoordinates] = useState(testData[0].coordinateData);
 
   return (
     <EventContext.Provider value={{ eventType, setEventType, date, setDate }}>

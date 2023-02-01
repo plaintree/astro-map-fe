@@ -26,7 +26,7 @@ import commentData from "../data/commentData";
 
 const SingleEvent = ({ route }) => {
   const { eventType, setEventType, date } = useContext(EventContext);
-  const { avatarUrl, userName } = useContext(UserContext);
+  const { setFavEvents, favEventId, setFavEventId } = useContext(UserContext);
   const { userCountry } = useContext(LocationContext);
   const [text, setText] = useState("");
   const [showCommentInput, setShowCommentInput] = useState(false);
@@ -42,6 +42,7 @@ const SingleEvent = ({ route }) => {
     if (route.params !== undefined) {
       const getEvents = async () => {
         try {
+          setIsLoading(true);
           const response = await axios.get(
             `https://astro-map-be.onrender.com/api/eclipses/all/${route.params.id}`
           );
@@ -65,11 +66,13 @@ const SingleEvent = ({ route }) => {
 
           setEventInfo(currEventInfo[0]);
           setCurrEvent(nextEvent);
+          setIsFav(favEventId.includes(nextEvent._id));
 
           setEventType((currEventType) => ({
             ...currEventType,
             type: nextEvent.type,
           }));
+          setIsLoading(false);
         } catch (error) {
           console.log(error);
         }
@@ -107,6 +110,7 @@ const SingleEvent = ({ route }) => {
             ...currEventType,
             type: nextEvent.type,
           }));
+          setIsFav(favEventId.includes(nextEvent._id));
           setIsLoading(false);
         } catch (error) {
           console.log(error);
@@ -263,14 +267,32 @@ const SingleEvent = ({ route }) => {
                     size={24}
                     mode="contained-tonal"
                     icon="star"
-                    onPress={() => setIsFav((currStar) => !currStar)}
+                    onPress={() => {
+                      setIsFav(false);
+                      setFavEvents((existingEvents) =>
+                        existingEvents.filter((ev) => ev._id !== currEvent._id)
+                      );
+                      setFavEventId((existingEventId) =>
+                        existingEventId.filter((id) => id !== currEvent._id)
+                      );
+                    }}
                   />
                 ) : (
                   <IconButton
                     size={24}
                     mode="contained-tonal"
                     icon="star-outline"
-                    onPress={() => setIsFav((currStar) => !currStar)}
+                    onPress={() => {
+                      setIsFav(true);
+                      setFavEvents((existingEvents) => [
+                        ...existingEvents,
+                        currEvent,
+                      ]);
+                      setFavEventId((existingEventId) => [
+                        ...existingEventId,
+                        currEvent._id,
+                      ]);
+                    }}
                   />
                 )}
               </View>
