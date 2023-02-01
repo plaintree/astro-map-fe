@@ -10,10 +10,13 @@ const UserRegister = ({ navigation }) => {
   const [passwordInput, setPasswordInput] = useState("");
   const [usernameInput, setUsernameInput] = useState("");
   const [invalidMsg, setInvalidMsg] = useState(null);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const { setUserName, setIsLogin, setFavEvents } = useContext(UserContext);
 
   const handleRegister = async () => {
+    setIsRegistering(true);
     const regPassword =
       /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/;
     const regUsername = /^(?=.*[a-z])(?=.*[A-Z])(?!.* ).{8,}$/;
@@ -42,9 +45,11 @@ const UserRegister = ({ navigation }) => {
     }
     setPasswordInput("");
     setUsernameInput("");
+    setIsRegistering(false);
   };
 
   const handleLogin = async () => {
+    setIsLoggingIn(true);
     const res = await axios.post(
       "https://astro-map-be.onrender.com/api/users/login",
       {
@@ -52,9 +57,9 @@ const UserRegister = ({ navigation }) => {
         password: passwordInput,
       }
     );
-    console.log(res.data);
     setUserName(res.data.username);
     setFavEvents(res.data.favourites);
+    setIsLoggingIn(false);
     setIsLogin(true);
   };
 
@@ -111,10 +116,17 @@ const UserRegister = ({ navigation }) => {
           mode="contained"
           style={{ marginRight: 10 }}
           onPress={handleLogin}
+          disabled={isLoggingIn || isRegistering ? true : false}
+          loading={isLoggingIn ? true : false}
         >
           Sign In
         </Button>
-        <Button mode="contained-tonal" onPress={handleRegister}>
+        <Button
+          mode="contained-tonal"
+          onPress={handleRegister}
+          disabled={isRegistering || isLoggingIn ? true : false}
+          loading={isRegistering ? true : false}
+        >
           Register
         </Button>
       </View>

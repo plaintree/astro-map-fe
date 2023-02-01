@@ -22,11 +22,10 @@ import { UserContext } from "../context/UserContext";
 import CommentList from "../components/CommentList";
 
 import eventInformation from "../data/eventInformation";
-import commentData from "../data/commentData";
 
 const SingleEvent = ({ route }) => {
   const { eventType, setEventType, date } = useContext(EventContext);
-  const { setFavEvents, favEventId, setFavEventId, userName } =
+  const { setFavEvents, favEventId, setFavEventId, userName, isLogin } =
     useContext(UserContext);
   const { userCountry } = useContext(LocationContext);
   const [text, setText] = useState("");
@@ -34,8 +33,12 @@ const SingleEvent = ({ route }) => {
   const [showMap, setShowMap] = useState(false);
   const [isFav, setIsFav] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const theme = useTheme();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loginMsg, setLoginMsg] = useState(null);
+  const [refreshComments, setRefreshComments] = useState(null);
 
+  const theme = useTheme();
+  const [commentData, setCommentData] = useState([]);
   const [currEvent, setCurrEvent] = useState({});
   const [eventInfo, setEventInfo] = useState({});
 
@@ -65,6 +68,11 @@ const SingleEvent = ({ route }) => {
             (event) => event.type === nextEvent.type
           );
 
+          const { data } = await axios.get(
+            `https://astro-map-be.onrender.com/api/comments/${nextEvent.date}`
+          );
+
+          setCommentData(data);
           setEventInfo(currEventInfo[0]);
           setCurrEvent(nextEvent);
           setIsFav(favEventId.includes(nextEvent._id));
@@ -104,7 +112,11 @@ const SingleEvent = ({ route }) => {
           const currEventInfo = eventInformation.filter(
             (event) => event.type === nextEvent.type
           );
+          const { data } = await axios.get(
+            `https://astro-map-be.onrender.com/api/comments/${nextEvent.date}`
+          );
 
+          setCommentData(data);
           setEventInfo(currEventInfo[0]);
           setCurrEvent(nextEvent);
           setEventType((currEventType) => ({
@@ -119,7 +131,10 @@ const SingleEvent = ({ route }) => {
       };
       getEvents();
     }
-  }, []);
+    return () => {
+      setRefreshComments(null);
+    };
+  }, [refreshComments]);
 
   const handleFavButtonClick = (username, date) => {
     if (isFav) {
@@ -148,6 +163,24 @@ const SingleEvent = ({ route }) => {
           favourite: date,
         }
       );
+    }
+  };
+
+  const handleSubmitClick = async (user, content, id) => {
+    if (isLoading) {
+      setIsSubmitting(true);
+      await axios.post(`https://astro-map-be.onrender.com/api/comments/${id}`, {
+        username: user,
+        body: content,
+        event: id,
+      });
+      setIsSubmitting(false);
+      setText("");
+      setLoginMsg(null);
+      setRefreshComments(true);
+    } else {
+      setLoginMsg("Please login first before submitting comment");
+      setText("");
     }
   };
   return (
@@ -330,7 +363,7 @@ const SingleEvent = ({ route }) => {
               <>
                 <Card.Content style={{ marginVertical: 20 }}>
                   {commentData.map((comm) => (
-                    <CommentList comment={comm} key={comm.id} />
+                    <CommentList comment={comm} key={comm._id} />
                   ))}
                 </Card.Content>
                 <TextInput
@@ -342,15 +375,30 @@ const SingleEvent = ({ route }) => {
                     alignSelf: "center",
                   }}
                   multiline
+                  editable={isSubmitting ? false : true}
                   value={text}
                   onChangeText={(text) => setText(text)}
                 />
+                {loginMsg && (
+                  <Text style={{ marginLeft: 20, color: theme.colors.error }}>
+                    {loginMsg}
+                  </Text>
+                )}
                 <Card.Actions>
-                  <Button>Submit</Button>
+                  <Button
+                    onPress={() =>
+                      handleSubmitClick(userName, text, currEvent?.date)
+                    }
+                    loading={isSubmitting ? true : false}
+                    disabled={isSubmitting ? true : false}
+                  >
+                    Submit
+                  </Button>
                   <Button
                     onPress={() => {
                       setShowCommentInput(false);
                       setText("");
+                      setLoginMsg(null);
                     }}
                   >
                     Cancel
