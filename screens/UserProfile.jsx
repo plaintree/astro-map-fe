@@ -1,8 +1,9 @@
 import { useState, useContext, useEffect } from "react";
-import { View, ScrollView, Image } from "react-native";
+import { View, ScrollView, Image,} from "react-native";
 import { List, Text, Button, useTheme, ActivityIndicator } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Avatar } from "react-native-paper";
+import * as ImagePicker from 'expo-image-picker';
 import moment from "moment";
 import axios from "axios";
 
@@ -53,7 +54,7 @@ const UserProfile = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, alignItems: "center", marginVertical: 50 }}>
-      <Avatar.Image size={150} source={{ uri: avatarUrl }} />
+      <Avatar.Image size={150} source={{uri: avatarUrl}}/>
       <Text
         variant="displaySmall"
         style={{ marginVertical: 20, fontWeight: "800" }}
