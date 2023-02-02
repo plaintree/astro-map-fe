@@ -17,7 +17,7 @@ export const UserContext = createContext({
 });
 
 const UserContextProvider = ({ children }) => {
-  const [userName, setUserName] = useState("sadPug001");
+  const [userName, setUserName] = useState("");
   const [favoriteType, setFavoriteType] = useState("");
 
   const [avatarUrl, setAvatarUrl] = useState(
@@ -26,8 +26,6 @@ const UserContextProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [favEvents, setFavEvents] = useState([]);
   const [favEventId, setFavEventId] = useState([]);
-
-  console.log(favEvents)
   
   return (
     <UserContext.Provider

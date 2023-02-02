@@ -14,7 +14,6 @@ import {
 
 import { UserContext } from "../context/UserContext";
 
-
 const CommentList = ({ comment, setRefreshComments }) => {
   const [showModal, setShowModal] = useState(false);
   const theme = useTheme();
@@ -22,7 +21,6 @@ const CommentList = ({ comment, setRefreshComments }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   
   const handleConfirmDelete = async (commentId) => {
-    console.log(commentId);
     setIsDeleting(true);
     await axios.delete(`https://astro-map-be.onrender.com/api/comments/${commentId}`)
     setIsDeleting(false);

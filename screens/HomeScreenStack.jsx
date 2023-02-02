@@ -6,9 +6,9 @@ import SingleEvent from "./SingleEvent";
 const Stack = createNativeStackNavigator();
 
 const HomeScreenStack = () => {
-
     return (
-        <Stack.Navigator>
+        <Stack.Navigator 
+          initialRouteName="Home Screen" >
             <Stack.Screen
               name="Home Screen"
               component={HomeScreen}

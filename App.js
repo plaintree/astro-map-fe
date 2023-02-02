@@ -24,9 +24,13 @@ export default function App() {
           <UserContextProvider>
             <PaperProvider theme={MD3DarkTheme}>
               <NavigationContainer theme={MD3DarkTheme}>
-                <Tab.Navigator initialRouteName="Home">
+                <Tab.Navigator
+                  initialRouteName="Home Screen"
+                  backBehavior="initialRoute"
+                >
                   <Tab.Screen
                     name="Home"
+                    initialRouteName="Home Screen"
                     component={HomeScreenStack}
                     options={{
                       tabBarIcon: ({ color }) => (
