@@ -8,7 +8,7 @@ You can checkout the backend server for this app [here](https://github.com/AliCW
 
 The frontend has been implemented using React Native with Expo to create a mobile application. Material Dark theme is asserted by an UI library called [React Native Paper](https://callstack.github.io/react-native-paper/index.html) while [React Navigation](https://reactnavigation.org/) is used for switching tabs with fluid animation.
 
-For the design of the application, [react-native-snap-carousel](https://github.com/meliorence/react-native-snap-carousel) gives the ability to scroll cards on homepage horizontally. The map view is provided by [react-native-maps](https://github.com/react-native-maps/react-native-maps) so thet you can see the path of astronomical events when you click on the map view.
+For the design of the application, [react-native-snap-carousel](https://github.com/meliorence/react-native-snap-carousel) gives the ability to scroll cards on homepage horizontally. The map view is provided by [react-native-maps](https://github.com/react-native-maps/react-native-maps) so that you can see the path of different astronomical events when you click on the map view.
 
 ## Minimum development requirement
 
