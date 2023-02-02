@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TimeMachine from "./TimeMachine";
 import SingleEvent from "./SingleEvent";
+import HomeScreen from "./HomeScreen";
 
 const Stack = createNativeStackNavigator();
 

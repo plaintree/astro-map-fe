@@ -63,23 +63,4 @@ const CarouselItem = ({ item, index }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  image: {
-    width: ITEM_WIDTH,
-    height: "60%",
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    paddingLeft: 20,
-    paddingTop: 10,
-  },
-  body: {
-    fontSize: 14,
-    paddingLeft: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-});
-
 export default CarouselItem;

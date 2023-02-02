@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import axios from 'axios';
 
 import { View, TouchableOpacity } from "react-native";
 import {
@@ -13,10 +14,18 @@ import {
 
 import { UserContext } from "../context/UserContext";
 
-const CommentList = ({ comment }) => {
+const CommentList = ({ comment, setRefreshComments }) => {
   const [showModal, setShowModal] = useState(false);
   const theme = useTheme();
   const { avatarUrl } = useContext(UserContext);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
+  const handleConfirmDelete = async (commentId) => {
+    setIsDeleting(true);
+    await axios.delete(`https://astro-map-be.onrender.com/api/comments/${commentId}`)
+    setIsDeleting(false);
+    setRefreshComments(true);
+  }
 
   return (
     <>
@@ -43,7 +52,12 @@ const CommentList = ({ comment }) => {
                 marginTop: 10,
               }}
             >
-              <Button mode="outlined" style={{ marginRight: 10 }}>
+              <Button 
+                mode="outlined" 
+                style={{ marginRight: 10 }}
+                onPress={() => handleConfirmDelete(comment._id)}
+                loading={isDeleting ? true : false}
+                disabled={isDeleting ? true : false}>
                 Confirm
               </Button>
               <Button mode="contained" onPress={() => setShowModal(false)}>

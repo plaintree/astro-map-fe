@@ -25,7 +25,7 @@ import eventInformation from "../data/eventInformation";
 
 const SingleEvent = ({ route }) => {
   const { eventType, setEventType, date } = useContext(EventContext);
-  const { setFavEvents, favEventId, setFavEventId, userName, isLogin } =
+  const { setFavEvents, favEventId, setFavEventId, userName, isLogin, favEvents } =
     useContext(UserContext);
   const { userCountry } = useContext(LocationContext);
   const [text, setText] = useState("");
@@ -75,7 +75,7 @@ const SingleEvent = ({ route }) => {
           setCommentData(data);
           setEventInfo(currEventInfo[0]);
           setCurrEvent(nextEvent);
-          setIsFav(favEventId.includes(nextEvent._id));
+          setIsFav(favEvents.includes(nextEvent.date));
 
           setEventType((currEventType) => ({
             ...currEventType,
@@ -166,23 +166,31 @@ const SingleEvent = ({ route }) => {
     }
   };
 
-  const handleSubmitClick = async (user, content, id) => {
-    if (isLoading) {
+  const handleSubmitClick = (user, content, id) => {
+    if (isLogin) {
       setIsSubmitting(true);
-      await axios.post(`https://astro-map-be.onrender.com/api/comments/${id}`, {
-        username: user,
-        body: content,
-        event: id,
-      });
-      setIsSubmitting(false);
-      setText("");
-      setLoginMsg(null);
-      setRefreshComments(true);
-    } else {
-      setLoginMsg("Please login first before submitting comment");
-      setText("");
-    }
+      try {
+        const postComment = async (id) => {
+          await axios.post(`https://astro-map-be.onrender.com/api/comments/${id}`, {
+            username: user,
+            body: content,
+            event: id,
+          });
+          setText("");
+          setLoginMsg(null);
+          setRefreshComments(true);   
+          setIsSubmitting(false);
+        }
+        postComment(id);
+      } catch (error) {
+        console.log(error)
+      }
+      } else {
+        setLoginMsg("Please login first before submitting comment");
+        setText("");
+      }
   };
+
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: 40 }}>
       <View
@@ -363,7 +371,7 @@ const SingleEvent = ({ route }) => {
               <>
                 <Card.Content style={{ marginVertical: 20 }}>
                   {commentData.map((comm) => (
-                    <CommentList comment={comm} key={comm._id} />
+                    <CommentList comment={comm} key={comm._id} setRefreshComments={setRefreshComments}/>
                   ))}
                 </Card.Content>
                 <TextInput
