@@ -26,6 +26,9 @@ const UserContextProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [favEvents, setFavEvents] = useState([]);
   const [favEventId, setFavEventId] = useState([]);
+
+  console.log(favEvents)
+  
   return (
     <UserContext.Provider
       value={{

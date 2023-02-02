@@ -25,7 +25,7 @@ import eventInformation from "../data/eventInformation";
 
 const SingleEvent = ({ route }) => {
   const { eventType, setEventType, date } = useContext(EventContext);
-  const { setFavEvents, favEventId, setFavEventId, userName, isLogin } =
+  const { setFavEvents, favEventId, setFavEventId, userName, isLogin, favEvents } =
     useContext(UserContext);
   const { userCountry } = useContext(LocationContext);
   const [text, setText] = useState("");
@@ -75,7 +75,7 @@ const SingleEvent = ({ route }) => {
           setCommentData(data);
           setEventInfo(currEventInfo[0]);
           setCurrEvent(nextEvent);
-          setIsFav(favEventId.includes(nextEvent._id));
+          setIsFav(favEvents.includes(nextEvent.date));
 
           setEventType((currEventType) => ({
             ...currEventType,
