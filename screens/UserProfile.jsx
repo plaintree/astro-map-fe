@@ -1,9 +1,14 @@
 import { useState, useContext, useEffect } from "react";
-import { View, ScrollView, Image,} from "react-native";
-import { List, Text, Button, useTheme, ActivityIndicator } from "react-native-paper";
+import { View, ScrollView, Image } from "react-native";
+import {
+  List,
+  Text,
+  Button,
+  useTheme,
+  ActivityIndicator,
+} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Avatar } from "react-native-paper";
-import * as ImagePicker from 'expo-image-picker';
 import moment from "moment";
 import axios from "axios";
 
@@ -54,7 +59,7 @@ const UserProfile = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, alignItems: "center", marginVertical: 50 }}>
-      <Avatar.Image size={150} source={{uri: avatarUrl}}/>
+      <Avatar.Image size={150} source={{ uri: avatarUrl }} />
       <Text
         variant="displaySmall"
         style={{ marginVertical: 20, fontWeight: "800" }}
@@ -133,66 +138,75 @@ const UserProfile = ({ navigation }) => {
 
         {isLoading ? (
           <ActivityIndicator
-          animating={true}
-          size="large"
-          style={{ flex: 1, marginVertical: 30, alignSelf: "center", justifyContent: "center" }}
-        />
-        ) : (
-        <>
-        <Text
-        variant="titleLarge"
-        style={{ marginVertical: 20, fontWeight: "700", textAlign: "center" }}
-      >
-        Your favourite collection
-      </Text>
-      {favEvents.length === 0 && (
-        <Text
-          variant="titleMedium"
-          style={{ fontWeight: "700", textAlign: "center" }}
-        >
-          You don't have any favorite events
-        </Text>
-      )}
-      {listFavEvents.map((ev) => (
-        <View
-          key={ev._id}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            borderRadius: 20,
-            backgroundColor: theme.colors.surfaceVariant,
-            marginBottom: 10,
-          }}
-        >
-          <View style={{ padding: 10 }}>
-            <Text variant="titleMedium">{eventType.title}</Text>
-            <Text
-              variant="titleSmall"
-              style={{ textTransform: "capitalize" }}
-            >
-              {ev.type}
-            </Text>
-            <Text variant="titleSmall">
-              {moment(ev.date).format("DD MMM YYYY")}
-            </Text>
-          </View>
-          <Image
-            source={{
-              uri: getEventImageURL(ev.type),
-            }}
+            animating={true}
+            size="large"
             style={{
-              width: "50%",
-              height: "100%",
-              borderBottomRightRadius: 20,
-              borderTopRightRadius: 20,
+              flex: 1,
+              marginVertical: 30,
+              alignSelf: "center",
+              justifyContent: "center",
             }}
-            resizeMode="cover"
           />
-        </View>
-      ))}
-      </>
-        )}      
+        ) : (
+          <>
+            <Text
+              variant="titleLarge"
+              style={{
+                marginVertical: 20,
+                fontWeight: "700",
+                textAlign: "center",
+              }}
+            >
+              Your favourite collection
+            </Text>
+            {favEvents.length === 0 && (
+              <Text
+                variant="titleMedium"
+                style={{ fontWeight: "700", textAlign: "center" }}
+              >
+                You don't have any favorite events
+              </Text>
+            )}
+            {listFavEvents.map((ev) => (
+              <View
+                key={ev._id}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderRadius: 20,
+                  backgroundColor: theme.colors.surfaceVariant,
+                  marginBottom: 10,
+                }}
+              >
+                <View style={{ padding: 10 }}>
+                  <Text variant="titleMedium">{eventType.title}</Text>
+                  <Text
+                    variant="titleSmall"
+                    style={{ textTransform: "capitalize" }}
+                  >
+                    {ev.type}
+                  </Text>
+                  <Text variant="titleSmall">
+                    {moment(ev.date).format("DD MMM YYYY")}
+                  </Text>
+                </View>
+                <Image
+                  source={{
+                    uri: getEventImageURL(ev.type),
+                  }}
+                  style={{
+                    width: "50%",
+                    height: "100%",
+                    borderBottomRightRadius: 20,
+                    borderTopRightRadius: 20,
+                  }}
+                  resizeMode="cover"
+                />
+              </View>
+            ))}
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

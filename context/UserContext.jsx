@@ -12,8 +12,6 @@ export const UserContext = createContext({
   setIsLogin: () => {},
   favEvents: [],
   setFavEvents: () => {},
-  favEventId: [],
-  setFavEventId: () => {},
 });
 
 const UserContextProvider = ({ children }) => {
@@ -25,8 +23,7 @@ const UserContextProvider = ({ children }) => {
   );
   const [isLogin, setIsLogin] = useState(false);
   const [favEvents, setFavEvents] = useState([]);
-  const [favEventId, setFavEventId] = useState([]);
-  
+
   return (
     <UserContext.Provider
       value={{
@@ -41,8 +38,6 @@ const UserContextProvider = ({ children }) => {
         setIsLogin,
         favEvents,
         setFavEvents,
-        favEventId,
-        setFavEventId,
       }}
     >
       {children}

@@ -25,7 +25,7 @@ import eventInformation from "../data/eventInformation";
 
 const SingleEvent = ({ route }) => {
   const { eventType, setEventType, date } = useContext(EventContext);
-  const { setFavEvents, favEventId, setFavEventId, userName, isLogin, favEvents } =
+  const { setFavEvents, userName, isLogin, favEvents } =
     useContext(UserContext);
   const { userCountry } = useContext(LocationContext);
   const [text, setText] = useState("");
@@ -123,7 +123,7 @@ const SingleEvent = ({ route }) => {
             ...currEventType,
             type: nextEvent.type,
           }));
-          setIsFav(favEventId.includes(nextEvent._id));
+          setIsFav(favEvents.includes(nextEvent.date));
           setIsLoading(false);
         } catch (error) {
           console.log(error);
@@ -142,9 +142,7 @@ const SingleEvent = ({ route }) => {
       setFavEvents((existingDates) =>
         existingDates.filter((date) => date !== currEvent.date)
       );
-      setFavEventId((existingEventId) =>
-        existingEventId.filter((id) => id !== currEvent._id)
-      );
+
       axios.patch(
         `https://astro-map-be.onrender.com/api/users/${username}/favourites/remove`,
         {
@@ -155,7 +153,6 @@ const SingleEvent = ({ route }) => {
     } else {
       setIsFav(true);
       setFavEvents((existingDates) => [...existingDates, currEvent.date]);
-      setFavEventId((existingEventId) => [...existingEventId, currEvent._id]);
       axios.patch(
         `https://astro-map-be.onrender.com/api/users/${username}/favourites`,
         {
@@ -171,24 +168,27 @@ const SingleEvent = ({ route }) => {
       setIsSubmitting(true);
       try {
         const postComment = async (id) => {
-          await axios.post(`https://astro-map-be.onrender.com/api/comments/${id}`, {
-            username: user,
-            body: content,
-            event: id,
-          });
+          await axios.post(
+            `https://astro-map-be.onrender.com/api/comments/${id}`,
+            {
+              username: user,
+              body: content,
+              event: id,
+            }
+          );
           setText("");
           setLoginMsg(null);
-          setRefreshComments(true);   
+          setRefreshComments(true);
           setIsSubmitting(false);
-        }
+        };
         postComment(id);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-      } else {
-        setLoginMsg("Please login first before submitting comment");
-        setText("");
-      }
+    } else {
+      setLoginMsg("Please login first before submitting comment");
+      setText("");
+    }
   };
 
   return (
@@ -333,29 +333,29 @@ const SingleEvent = ({ route }) => {
                     )}
                   </Text>
                 </View>
-                { isLogin && 
-                <>
-                  {isFav ? (
-                    <IconButton
-                      size={24}
-                      mode="contained-tonal"
-                      icon="star"
-                      onPress={() =>
-                        handleFavButtonClick(userName, currEvent?.date)
-                      }
-                    />
-                  ) : (
-                    <IconButton
-                      size={24}
-                      mode="contained-tonal"
-                      icon="star-outline"
-                      onPress={() =>
-                        handleFavButtonClick(userName, currEvent?.date)
-                      }
-                    />
-                  )}
-                </>
-                }
+                {isLogin && (
+                  <>
+                    {isFav ? (
+                      <IconButton
+                        size={24}
+                        mode="contained-tonal"
+                        icon="star"
+                        onPress={() =>
+                          handleFavButtonClick(userName, currEvent?.date)
+                        }
+                      />
+                    ) : (
+                      <IconButton
+                        size={24}
+                        mode="contained-tonal"
+                        icon="star-outline"
+                        onPress={() =>
+                          handleFavButtonClick(userName, currEvent?.date)
+                        }
+                      />
+                    )}
+                  </>
+                )}
               </View>
 
               <Text variant="bodyMedium">{eventInfo.desc}</Text>
@@ -375,7 +375,11 @@ const SingleEvent = ({ route }) => {
               <>
                 <Card.Content style={{ marginVertical: 20 }}>
                   {commentData.map((comm) => (
-                    <CommentList comment={comm} key={comm._id} setRefreshComments={setRefreshComments}/>
+                    <CommentList
+                      comment={comm}
+                      key={comm._id}
+                      setRefreshComments={setRefreshComments}
+                    />
                   ))}
                 </Card.Content>
                 <TextInput
