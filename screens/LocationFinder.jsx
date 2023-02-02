@@ -43,6 +43,7 @@ const LocationFinder = ({ navigation }) => {
         region={region}
         initialRegion={region}
         style={{ width: "100%", height: "50%" }}
+        loadingEnabled={true}
       >
         <MarkerAnimated
           coordinate={pin}
