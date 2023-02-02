@@ -371,7 +371,7 @@ const SingleEvent = ({ route }) => {
               <>
                 <Card.Content style={{ marginVertical: 20 }}>
                   {commentData.map((comm) => (
-                    <CommentList comment={comm} key={comm._id} />
+                    <CommentList comment={comm} key={comm._id} setRefreshComments={setRefreshComments}/>
                   ))}
                 </Card.Content>
                 <TextInput
