@@ -1,8 +1,7 @@
 import axios from "axios";
-import { View } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { View, ScrollView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Text } from "react-native-paper";
+import { Text, ActivityIndicator } from "react-native-paper";
 import { useRef, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Carousel from "react-native-snap-carousel";
@@ -10,11 +9,13 @@ import CarouselItem, {
   SLIDER_WIDTH,
   ITEM_WIDTH,
 } from "../components/CarouselItem";
-import data from "../data";
 import moment from "moment";
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
   const [moonPhase, setMoonPhase] = useState("");
+  const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const getMoonPhase = async () => {
       try {
@@ -28,6 +29,23 @@ const HomeScreen = ({ navigation }) => {
       }
     };
     getMoonPhase();
+  }, []);
+
+  useEffect(() => {
+    const getEvents = async () => {
+      const today = moment().format("YYYY-MM-DD");
+      try {
+        setIsLoading(true);
+        const response = await axios.get(
+          `https://astro-map-be.onrender.com/api/eclipses/all/${today}`
+        );
+        setEvents(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getEvents();
   }, []);
 
   const isCarousel = useRef(null);
@@ -44,11 +62,10 @@ const HomeScreen = ({ navigation }) => {
     <SafeAreaView
       style={{
         flex: 1,
-        paddingVertical: 40,
+        paddingTop: 40,
         alignItems: "center",
       }}
     >
-      <StatusBar style="auto" />
       <View
         style={{
           flexDirection: "row",
@@ -76,18 +93,27 @@ const HomeScreen = ({ navigation }) => {
           </Text>
         </View>
       </View>
-
-      <Carousel
-        layout="default"
-        layoutCardOffset={9}
-        ref={isCarousel}
-        data={data}
-        renderItem={CarouselItem}
-        sliderWidth={SLIDER_WIDTH}
-        itemWidth={ITEM_WIDTH}
-        inactiveSlideShift={0}
-        useScrollView={true}
-      />
+      {isLoading ? (
+        <ActivityIndicator
+          animating={true}
+          size="large"
+          style={{ flex: 1, alignSelf: "center", justifyContent: "center" }}
+        />
+      ) : (
+        <ScrollView>
+          <Carousel
+            layout="default"
+            layoutCardOffset={9}
+            ref={isCarousel}
+            data={events}
+            renderItem={CarouselItem}
+            sliderWidth={SLIDER_WIDTH}
+            itemWidth={ITEM_WIDTH}
+            inactiveSlideShift={0}
+            useScrollView={true}
+          />
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };

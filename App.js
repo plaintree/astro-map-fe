@@ -7,9 +7,8 @@ import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 
 import UserProfileStack from "./screens/UserProfileStack";
 import TimeMachineStack from "./screens/TimeMachineStack";
-import HomeScreen from "./screens/HomeScreen";
+import HomeScreenStack from "./screens/HomeScreenStack";
 import LocationFinder from "./screens/LocationFinder";
-import Globe from "./screens/Globe";
 
 import LocationContextProvider from "./context/LocationContext";
 import EventContextProvider from "./context/EventContext";
@@ -28,7 +27,7 @@ export default function App() {
                 <Tab.Navigator initialRouteName="Home">
                   <Tab.Screen
                     name="Home"
-                    component={HomeScreen}
+                    component={HomeScreenStack}
                     options={{
                       tabBarIcon: ({ color }) => (
                         <FontAwesome5 name="home" size={20} color={color} />
@@ -54,19 +53,6 @@ export default function App() {
                     }}
                   />
 
-                  <Tab.Screen
-                    name="Globe"
-                    component={Globe}
-                    options={{
-                      tabBarIcon: ({ color }) => (
-                        <FontAwesome5
-                          name="globe-americas"
-                          size={20}
-                          color={color}
-                        />
-                      ),
-                    }}
-                  />
                   <Tab.Screen
                     name="Events"
                     component={TimeMachineStack}

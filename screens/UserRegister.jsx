@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState, useContext } from "react";
 import { View } from "react-native";
 import { Text, TextInput, Button } from "react-native-paper";
@@ -9,20 +10,30 @@ const UserRegister = ({ navigation }) => {
   const [passwordInput, setPasswordInput] = useState("");
   const [usernameInput, setUsernameInput] = useState("");
   const [invalidMsg, setInvalidMsg] = useState(null);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
 
-  const { setPassword, setUserName, setIsLogin, isLogin } =
-    useContext(UserContext);
+  const { setUserName, setIsLogin, setFavEvents } = useContext(UserContext);
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
+    setIsRegistering(true);
     const regPassword =
       /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/;
     const regUsername = /^(?=.*[a-z])(?=.*[A-Z])(?!.* ).{8,}$/;
-    if (regPassword.test(passwordInput) && regUsername.test(usernameInput)) {
-      setPassword(passwordInput);
-      setUserName(usernameInput);
+    if (
+      regPassword.test(passwordInput) &&
+      regUsername.test(usernameInput.trim())
+    ) {
       setIsLogin(true);
       setInvalidMsg(null);
-      navigation.navigate("User Profile");
+      const res = await axios.post(
+        "https://astro-map-be.onrender.com/api/users/signup",
+        {
+          username: usernameInput,
+          password: passwordInput,
+        }
+      );
+      setUserName(res.data.username);
     } else if (!regUsername.test(usernameInput.trim())) {
       setInvalidMsg(
         "Username must be at least 8 characters long with one uppercase"
@@ -34,13 +45,24 @@ const UserRegister = ({ navigation }) => {
     }
     setPasswordInput("");
     setUsernameInput("");
+    setIsRegistering(false);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    setIsLoggingIn(true);
+    const res = await axios.post(
+      "https://astro-map-be.onrender.com/api/users/login",
+      {
+        username: usernameInput,
+        password: passwordInput,
+      }
+    );
+    setUserName(res.data.username);
+    setFavEvents(res.data.favourites);
+    setIsLoggingIn(false);
     setIsLogin(true);
-  }
+  };
 
-  // ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$
   return (
     <SafeAreaView
       style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
@@ -54,14 +76,16 @@ const UserRegister = ({ navigation }) => {
       <TextInput
         mode="outlined"
         label="Username"
+        editable={isLoggingIn || isRegistering ? false : true}
         style={{ width: "80%" }}
         value={usernameInput}
-        onChangeText={(text) => setUsernameInput(text)}
+        onChangeText={(text) => setUsernameInput(text.trim())}
       />
       <TextInput
         mode="outlined"
         label="Password"
         secureTextEntry={showPassword ? false : true}
+        editable={isLoggingIn || isRegistering ? false : true}
         value={passwordInput}
         onChangeText={(text) => setPasswordInput(text)}
         style={{ width: "80%" }}
@@ -90,10 +114,21 @@ const UserRegister = ({ navigation }) => {
         </Text>
       )}
       <View style={{ flexDirection: "row", marginTop: 10 }}>
-        <Button mode="contained" style={{ marginRight: 10 }} onPress={handleLogin}>
+        <Button
+          mode="contained"
+          style={{ marginRight: 10 }}
+          onPress={handleLogin}
+          disabled={isLoggingIn || isRegistering ? true : false}
+          loading={isLoggingIn ? true : false}
+        >
           Sign In
         </Button>
-        <Button mode="contained-tonal" onPress={handleRegister}>
+        <Button
+          mode="contained-tonal"
+          onPress={handleRegister}
+          disabled={isRegistering || isLoggingIn ? true : false}
+          loading={isRegistering ? true : false}
+        >
           Register
         </Button>
       </View>
@@ -105,8 +140,7 @@ const UserRegister = ({ navigation }) => {
           paddingTop: 10,
           paddingHorizontal: 20,
         }}
-      >
-      </Text>
+      ></Text>
     </SafeAreaView>
   );
 };
