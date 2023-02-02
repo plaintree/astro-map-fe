@@ -13,7 +13,7 @@ const UserRegister = ({ navigation }) => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
 
-  const { setUserName, setIsLogin, setFavEvents } = useContext(UserContext);
+  const { setUserName, setIsLogin, setFavEvents, setAvatarUrl } = useContext(UserContext);
 
   const handleRegister = async () => {
     setIsRegistering(true);
@@ -48,19 +48,26 @@ const UserRegister = ({ navigation }) => {
     setIsRegistering(false);
   };
 
-  const handleLogin = async () => {
-    setIsLoggingIn(true);
-    const res = await axios.post(
-      "https://astro-map-be.onrender.com/api/users/login",
-      {
-        username: usernameInput,
-        password: passwordInput,
-      }
-    );
-    setUserName(res.data.username);
-    setFavEvents(res.data.favourites);
-    setIsLoggingIn(false);
-    setIsLogin(true);
+  const handleLogin = () => {
+   
+      setIsLoggingIn(true);
+      const res = axios.post(
+        "https://astro-map-be.onrender.com/api/users/login",
+        {
+          username: usernameInput,
+          password: passwordInput,
+        }
+      ).then((res) => {
+        setUserName(res.data.username);
+        setFavEvents(res.data.favourites);
+        setIsLoggingIn(false);
+        setIsLogin(true);
+    
+        console.log(res.data)
+      }).catch((error) => {
+        setInvalidMsg("Username or password is incorrect, please try again.")
+      })
+
   };
 
   return (
