@@ -166,23 +166,31 @@ const SingleEvent = ({ route }) => {
     }
   };
 
-  const handleSubmitClick = async (user, content, id) => {
-    if (isLoading) {
+  const handleSubmitClick = (user, content, id) => {
+    if (isLogin) {
       setIsSubmitting(true);
-      await axios.post(`https://astro-map-be.onrender.com/api/comments/${id}`, {
-        username: user,
-        body: content,
-        event: id,
-      });
-      setIsSubmitting(false);
-      setText("");
-      setLoginMsg(null);
-      setRefreshComments(true);
-    } else {
-      setLoginMsg("Please login first before submitting comment");
-      setText("");
-    }
+      try {
+        const postComment = async (id) => {
+          await axios.post(`https://astro-map-be.onrender.com/api/comments/${id}`, {
+            username: user,
+            body: content,
+            event: id,
+          });
+          setText("");
+          setLoginMsg(null);
+          setRefreshComments(true);   
+          setIsSubmitting(false);
+        }
+        postComment(id);
+      } catch (error) {
+        console.log(error)
+      }
+      } else {
+        setLoginMsg("Please login first before submitting comment");
+        setText("");
+      }
   };
+
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: 40 }}>
       <View
