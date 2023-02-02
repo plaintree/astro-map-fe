@@ -333,25 +333,29 @@ const SingleEvent = ({ route }) => {
                     )}
                   </Text>
                 </View>
-                {isFav ? (
-                  <IconButton
-                    size={24}
-                    mode="contained-tonal"
-                    icon="star"
-                    onPress={() =>
-                      handleFavButtonClick(userName, currEvent?.date)
-                    }
-                  />
-                ) : (
-                  <IconButton
-                    size={24}
-                    mode="contained-tonal"
-                    icon="star-outline"
-                    onPress={() =>
-                      handleFavButtonClick(userName, currEvent?.date)
-                    }
-                  />
-                )}
+                { isLogin && 
+                <>
+                  {isFav ? (
+                    <IconButton
+                      size={24}
+                      mode="contained-tonal"
+                      icon="star"
+                      onPress={() =>
+                        handleFavButtonClick(userName, currEvent?.date)
+                      }
+                    />
+                  ) : (
+                    <IconButton
+                      size={24}
+                      mode="contained-tonal"
+                      icon="star-outline"
+                      onPress={() =>
+                        handleFavButtonClick(userName, currEvent?.date)
+                      }
+                    />
+                  )}
+                </>
+                }
               </View>
 
               <Text variant="bodyMedium">{eventInfo.desc}</Text>
